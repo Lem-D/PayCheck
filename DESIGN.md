@@ -40,6 +40,7 @@ Harbour Gold, picked by Lem on Oct 14 from the colour and layout options. Gold a
 - **Tiles.** Rounded panels (radius 18) on the background. Light mode adds a soft shadow; dark mode relies on the lighter surface. Spend and Save tiles are tinted with their colour mixed into the surface.
 - **Rings.** Drawn with `react-native-svg`. Payday has one big ring holding the pay amount (gold arc for the share saved, blue for the rest). Spending has a small ring for the period, and each goal has a ring with its percent saved.
 - **Screens.** Each tab starts with a bold title and an optional pill (today's date, days left). Spending limits and accounts are two-column tile grids; debt tiles get a red outline.
+- **Logo.** K "P Bill" (a blue bill with a P and a gold coin stack) is the app icon and splash; A "Split Ring" is the second logo for small spots. Files and how the icons are made are in `mockups/logo/README.md`. The splash uses the light or dark background to match the phone.
 - **Tab bar.** A floating rounded bar inset from the screen edges, with outline icons and the active tab in gold.
 
 ## Storage
