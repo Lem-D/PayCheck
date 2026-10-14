@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en-CA">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Paycheque Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one narrow column, phone first. Three tabs: Payday (type the cheque, get the plan), Goals (limits and savings goals), Accounts (balances and debts). */
+:root {
+  --bg: #eef2f0;
+  --surface: #ffffff;
+  --ink: #14211c;
+  --muted: #5b6b65;
+  --line: #d5ddd9;
+  --accent: #1d6b57;
+  --accent-ink: #ffffff;
+  --accent-soft: #dcebe5;
+  --spend: #3d5a80;
+  --spend-soft: #dde5ef;
+  --owe: #a9442c;
+  --owe-soft: #f5e1db;
+  --warn: #8a5a00;
+  --warn-soft: #f6ead0;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1513; --surface: #16201d; --ink: #e6eeea; --muted: #93a49d; --line: #2a3632;
+    --accent: #5cc3a3; --accent-ink: #08201a; --accent-soft: #1b3a31;
+    --spend: #8fb0d8; --spend-soft: #1d2a3a;
+    --owe: #ef8a6f; --owe-soft: #3a221c; --warn: #e5b85c; --warn-soft: #362a12; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1513; --surface: #16201d; --ink: #e6eeea; --muted: #93a49d; --line: #2a3632;
+  --accent: #5cc3a3; --accent-ink: #08201a; --accent-soft: #1b3a31;
+  --spend: #8fb0d8; --spend-soft: #1d2a3a;
+  --owe: #ef8a6f; --owe-soft: #3a221c; --warn: #e5b85c; --warn-soft: #362a12; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+.wrap, .view, .pay-top, section.group { grid-template-columns: minmax(0, 1fr); }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 640px; margin: 0 auto; padding-block: 24px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 24px; }
+.view { display: grid; gap: 28px; }
+h1, h2 { font-family: var(--display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h1 { font-size: 1.15rem; font-weight: 700; }
+h2 { font-size: 1.25rem; font-weight: 700; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+.sub { font-size: 0.88rem; color: var(--muted); margin: 0; }
+header.top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.sync { font-size: 0.8rem; color: var(--muted); }
+
+nav.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+nav.tabs button { font: inherit; font-weight: 600; padding: 9px 12px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); cursor: pointer; }
+nav.tabs button[aria-selected="true"] { background: var(--accent-soft); color: var(--accent); }
+nav.tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+.big { font-family: var(--display); font-size: clamp(2.4rem, 11vw, 3.4rem); font-weight: 700; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.big.neg { color: var(--owe); }
+.bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--line); }
+.bar span { display: block; height: 100%; }
+.bar .have, .bar .save { background: var(--accent); }
+.bar .owe { background: var(--owe); }
+.bar .spend { background: var(--spend); }
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+.split div { display: grid; gap: 2px; }
+.split .num { font-size: 1.1rem; font-weight: 500; }
+.split .owed .num { color: var(--owe); }
+.split .spent .num { color: var(--spend); }
+.split .saved .num { color: var(--accent); }
+.worth { display: grid; gap: 14px; }
+
+section.group { display: grid; gap: 10px; }
+.group-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.group-head .num { color: var(--muted); }
+ul.rows { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+ul.rows li + li { border-top: 1px solid var(--line); }
+ul.rows:empty { display: none; }
+.row { width: 100%; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; padding: 14px 16px; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.row:hover { background: color-mix(in srgb, var(--accent-soft) 50%, transparent); }
+.row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.row .name { font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.row .amt { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 500; text-align: right; }
+.row .meta { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; font-size: 0.82rem; color: var(--muted); }
+.chip { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; background: var(--accent-soft); color: var(--accent); }
+.debts .chip { background: var(--owe-soft); color: var(--owe); }
+.debts .row .amt { color: var(--owe); }
+.empty { padding: 18px 16px; color: var(--muted); font-size: 0.92rem; }
+
+.btn { font: inherit; font-weight: 600; border-radius: 10px; padding: 10px 16px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:disabled { opacity: .5; cursor: not-allowed; }
+.btn.danger { color: var(--owe); border-color: var(--owe); background: transparent; }
+.btn.danger.armed { background: var(--owe); color: var(--surface); }
+.btn.quiet { border-color: transparent; background: transparent; color: var(--muted); padding: 8px 10px; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+form.editor, .panel { display: grid; gap: 14px; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+form.editor { border-color: var(--accent); }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fields .wide { grid-column: 1 / -1; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field label, label.field-label { font-size: 0.82rem; font-weight: 600; color: var(--muted); }
+input, select { font: inherit; }
+.field input, .field select, .cell input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
+.field input:focus, .field select:focus, .cell input:focus, .pay-input input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+.field .hint { font-size: 0.75rem; color: var(--muted); }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.actions .spacer { flex: 1; }
+.err { color: var(--owe); font-size: 0.85rem; margin: 0; }
+
+/* Payday view */
+.pay-top { display: grid; gap: 12px; }
+.pay-input { display: flex; align-items: baseline; gap: 4px; border-bottom: 2px solid var(--line); padding-bottom: 4px; }
+.pay-input:focus-within { border-color: var(--accent); }
+.pay-input span { font-family: var(--display); font-size: clamp(2rem, 9vw, 2.8rem); font-weight: 700; color: var(--muted); }
+.pay-input input { flex: 1; min-width: 0; width: 100%; border: 0; background: transparent; color: var(--ink); font-family: var(--display); font-size: clamp(2.4rem, 11vw, 3.4rem); font-weight: 700; letter-spacing: -0.03em; padding: 0; font-variant-numeric: tabular-nums; border-radius: 4px; }
+.pay-input input:focus { outline: none; }
+.pay-input input::-webkit-outer-spin-button, .pay-input input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.pay-input input { -moz-appearance: textfield; }
+
+.plan-out { display: grid; gap: 18px; }
+.out-group { display: grid; gap: 8px; }
+.out-list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.out-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 12px 16px; align-items: baseline; }
+.out-list li + li { border-top: 1px solid var(--line); }
+.out-list .what { font-weight: 600; overflow-wrap: anywhere; }
+.out-list .why { grid-column: 1 / -1; font-size: 0.82rem; color: var(--muted); }
+.out-list .amt { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 500; }
+.out-list.spend .amt { color: var(--spend); }
+.out-list.save .amt { color: var(--accent); }
+.transfers { background: var(--accent-soft); border-color: transparent; }
+.transfers li + li { border-top-color: color-mix(in srgb, var(--accent) 25%, transparent); }
+.transfers .amt { color: var(--accent); font-size: 1.05rem; }
+
+/* Goals view */
+.lines { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.lines li { display: grid; grid-template-columns: minmax(0, 1fr) 8.5rem auto; gap: 8px; align-items: center; padding: 8px 8px 8px 12px; }
+.lines li + li { border-top: 1px solid var(--line); }
+.lines .cell input { padding: 8px 10px; }
+.lines .cell.amount input { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.lines .remove { font: inherit; width: 36px; height: 36px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); cursor: pointer; font-size: 1.2rem; line-height: 1; }
+.lines .remove:hover { background: var(--owe-soft); color: var(--owe); }
+.lines .remove:focus-visible { outline: 2px solid var(--accent); }
+.inline-field { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 0.92rem; }
+.inline-field select { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); max-width: 100%; }
+.goal .row { gap: 8px 12px; }
+.goal .progress { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.goal .progress span { display: block; height: 100%; background: var(--accent); }
+.goal.done .name::after { content: " ✓"; color: var(--accent); }
+
+.note { padding: 10px 14px; border-radius: 10px; font-size: 0.88rem; }
+.note.warn { background: var(--warn-soft); color: var(--warn); }
+.note.bad { background: var(--owe-soft); color: var(--owe); }
+.note.good { background: var(--accent-soft); color: var(--accent); }
+.notes { display: grid; gap: 8px; }
+.notes:empty { display: none; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 0.92rem; }
+.check input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--accent); }
+.history li { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 12px 16px; }
+.history .meta { grid-column: 1 / -1; font-size: 0.82rem; color: var(--muted); }
+
+.next { font-size: 0.85rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; margin: 0; }
+@media (max-width: 420px) {
+  .fields { grid-template-columns: 1fr; }
+  .lines li { grid-template-columns: minmax(0, 1fr) 7rem auto; }
+}
+@media (prefers-reduced-motion: no-preference) { .row, .btn, nav.tabs button { transition: background-color .15s; } .bar span, .progress span { transition: width .25s; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Paycheque Plan</h1>
+    <span class="sync" id="sync">Loading your numbers…</span>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button type="button" role="tab" id="tab-pay" aria-controls="view-pay" aria-selected="true">Payday</button>
+    <button type="button" role="tab" id="tab-goals" aria-controls="view-goals" aria-selected="false">Goals</button>
+    <button type="button" role="tab" id="tab-acc" aria-controls="view-acc" aria-selected="false">Accounts</button>
+  </nav>
+
+  <!-- PAYDAY -->
+  <div class="view" id="view-pay" role="tabpanel" aria-labelledby="tab-pay">
+    <section class="pay-top">
+      <label class="label" for="pay-amount">I got paid</label>
+      <div class="pay-input"><span aria-hidden="true">$</span><input id="pay-amount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0.00"></div>
+      <p class="sub" id="pay-hint">Type the amount that landed in your account and your plan appears below.</p>
+    </section>
+
+    <div class="panel" id="pay-setup" hidden>
+      <p class="sub" style="color:var(--ink)">Set your spending limits and savings goals first. Then every payday is just typing in the amount.</p>
+      <div class="btn-row"><button class="btn primary" type="button" id="go-goals">Set up my goals</button></div>
+    </div>
+
+    <div class="plan-out" id="plan-out" hidden>
+      <div class="bar" aria-hidden="true"><span class="spend" id="pb-spend" style="width:0%"></span><span class="save" id="pb-save" style="width:0%"></span></div>
+      <div class="split">
+        <div class="spent"><span class="label">Keep for spending</span><span class="num" id="p-spend">$0.00</span></div>
+        <div class="saved"><span class="label">Move to savings</span><span class="num" id="p-save">$0.00</span></div>
+      </div>
+      <div class="notes" id="pay-notes"></div>
+
+      <section class="out-group" aria-labelledby="tr-h">
+        <h2 id="tr-h">Transfers to make</h2>
+        <ul class="out-list transfers" id="transfers"></ul>
+      </section>
+
+      <section class="out-group" aria-labelledby="go-h">
+        <h2 id="go-h">Toward your goals</h2>
+        <ul class="out-list save" id="goal-out"></ul>
+      </section>
+
+      <section class="out-group" aria-labelledby="sp-h">
+        <h2 id="sp-h">Spending money this pay period</h2>
+        <ul class="out-list spend" id="spend-out"></ul>
+      </section>
+
+      <div class="panel">
+        <label class="check"><input type="checkbox" id="payday-apply" checked> <span>Add these deposits to my account balances and goal progress</span></label>
+        <div class="btn-row"><button class="btn primary" type="button" id="payday-done">I moved the money</button></div>
+        <p class="sub" id="payday-msg" role="status"></p>
+      </div>
+    </div>
+
+    <section class="group" aria-labelledby="hist-h" id="hist-section" hidden>
+      <h2 id="hist-h">Past paydays</h2>
+      <ul class="rows history" id="history"></ul>
+    </section>
+  </div>
+
+  <!-- GOALS -->
+  <div class="view" id="view-goals" role="tabpanel" aria-labelledby="tab-goals" hidden>
+    <section class="group" aria-labelledby="sg-h">
+      <div class="group-head"><h2 id="sg-h">Savings goals</h2><span class="num" id="goal-sum"></span></div>
+      <p class="sub">Give each goal a target and a date. Each payday, the plan sets aside what it takes to get there on time.</p>
+      <div id="goal-editor-slot"></div>
+      <ul class="rows" id="goal-list"></ul>
+      <button class="btn" type="button" id="add-goal" style="justify-self:start">+ Add goal</button>
+    </section>
+
+    <section class="group" aria-labelledby="lim-h">
+      <div class="group-head"><h2 id="lim-h">Spending limits</h2><span class="num" id="lim-sum"></span></div>
+      <p class="sub">What you allow yourself each pay period, bills included. This money stays in chequing.</p>
+      <div class="inline-field"><label for="pay-freq">I get paid</label>
+        <select id="pay-freq">
+          <option value="weekly">every week</option>
+          <option value="biweekly">every two weeks</option>
+          <option value="semimonthly">twice a month</option>
+          <option value="monthly">once a month</option>
+        </select>
+      </div>
+      <ul class="lines" id="lim-list"></ul>
+      <div class="btn-row">
+        <button class="btn" type="button" id="add-cat">+ Add category</button>
+        <button class="btn quiet" type="button" id="starter-cats">Start with common categories</button>
+      </div>
+    </section>
+
+    <section class="group" aria-labelledby="ex-h">
+      <h2 id="ex-h">Anything left over</h2>
+      <p class="sub">After spending and goals, extra money goes here.</p>
+      <div class="inline-field"><label for="extra-to">Send it to</label><select id="extra-to"></select></div>
+    </section>
+  </div>
+
+  <!-- ACCOUNTS -->
+  <div class="view" id="view-acc" role="tabpanel" aria-labelledby="tab-acc" hidden>
+    <section class="worth" aria-labelledby="worth-label">
+      <span class="label" id="worth-label">Net worth</span>
+      <div class="big" id="net">$0.00</div>
+      <div class="bar" aria-hidden="true"><span class="have" id="bar-have" style="width:0%"></span><span class="owe" id="bar-owe" style="width:0%"></span></div>
+      <div class="split">
+        <div><span class="label">You have</span><span class="num" id="tot-have">$0.00</span></div>
+        <div class="owed"><span class="label">You owe</span><span class="num" id="tot-owe">$0.00</span></div>
+      </div>
+    </section>
+
+    <section class="group accounts" aria-labelledby="acc-h">
+      <div class="group-head"><h2 id="acc-h">Accounts</h2><span class="num" id="acc-sum"></span></div>
+      <div id="acc-editor-slot"></div>
+      <ul class="rows" id="acc-list"></ul>
+      <button class="btn" type="button" id="add-acc" style="justify-self:start">+ Add account</button>
+    </section>
+
+    <section class="group debts" aria-labelledby="debt-h">
+      <div class="group-head"><h2 id="debt-h">What you owe</h2><span class="num" id="debt-sum"></span></div>
+      <div id="debt-editor-slot"></div>
+      <ul class="rows" id="debt-list"></ul>
+      <button class="btn" type="button" id="add-debt" style="justify-self:start">+ Add debt</button>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+  const ACCOUNT_KINDS = ["Chequing", "Savings", "TFSA", "RRSP", "FHSA", "Cash", "Other"];
+  const DEBT_KINDS = ["Credit card", "Line of credit", "Car loan", "Student loan", "Personal loan", "Owed to someone", "Other"];
+  const STARTER = ["Rent", "Groceries", "Phone", "Transit or gas", "Eating out", "Fun money"];
+  const PERIOD_DAYS = { weekly: 7, biweekly: 14, semimonthly: 365.25 / 24, monthly: 365.25 / 12 };
+  const LOCAL_ACC = "paycheque-plan-accounts";
+  const LOCAL_PLAN = "paycheque-plan-plan";
+  const LOCAL_TAB = "paycheque-plan-tab";
+  const fmt = new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" });
+
+  let acc = { accounts: [], debts: [] };
+  let plan = { frequency: "biweekly", categories: [], goals: [], extraTo: "", paydays: [] };
+  let accRef = null, planRef = null;
+  let editing = null; // { list: "accounts"|"debts"|"goals", id }
+  let payAmount = 0;
+
+  const $ = (id) => document.getElementById(id);
+  const money = (n) => fmt.format(Number(n) || 0);
+  const cents = (n) => Math.round((Number(n) || 0) * 100) / 100;
+  const num = (v) => { const n = parseFloat(v); return Number.isFinite(n) ? n : 0; };
+  const sum = (xs, k = "balance") => xs.reduce((t, x) => t + (Number(x[k]) || 0), 0);
+  const uid = () => Math.random().toString(36).slice(2, 10);
+  const setSync = (t) => { $("sync").textContent = t; };
+  const accountName = (id) => (acc.accounts.find((a) => a.id === id) || {}).name || "chequing";
+  const fmtDate = (d, opts = { month: "short", day: "numeric", year: "numeric" }) => new Date(d + (String(d).length === 10 ? "T12:00:00" : "")).toLocaleDateString("en-CA", opts);
+
+  function el(tag, attrs = {}, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v;
+      else if (k === "value") n.value = v;
+      else if (k === "style") n.setAttribute("style", v);
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+      else if (v !== undefined && v !== null && v !== false) n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const k of kids.flat()) if (k != null) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  }
+
+  /* ---------- tabs ---------- */
+  const TABS = { payday: ["tab-pay", "view-pay"], goals: ["tab-goals", "view-goals"], accounts: ["tab-acc", "view-acc"] };
+  function showTab(name) {
+    if (!TABS[name]) name = "payday";
+    for (const [k, [t, v]] of Object.entries(TABS)) { $(v).hidden = k !== name; $(t).setAttribute("aria-selected", String(k === name)); }
+    try { localStorage.setItem(LOCAL_TAB, name); } catch (e) {}
+  }
+  for (const [k, [t]] of Object.entries(TABS)) $(t).addEventListener("click", () => showTab(k));
+  $("go-goals").addEventListener("click", () => showTab("goals"));
+
+  /* ---------- goal math ---------- */
+  const remaining = (g) => Math.max(0, cents(num(g.target) - num(g.saved)));
+  function paydaysLeft(g) {
+    if (!g.date) return null;
+    const days = (new Date(g.date + "T23:59:59") - new Date()) / 86400000;
+    return Math.max(1, Math.ceil(days / PERIOD_DAYS[plan.frequency || "biweekly"]));
+  }
+  function perPaycheque(g) {
+    const left = paydaysLeft(g);
+    if (left === null) return null;
+    return Math.min(remaining(g), Math.ceil(remaining(g) / left * 100) / 100);
+  }
+
+  // Spending first, then dated goals (scaled down together if the cheque is short), then the extra.
+  function allocate(pay) {
+    pay = cents(pay);
+    let left = pay;
+    const spend = plan.categories.map((c) => {
+      const want = cents(c.limit);
+      const amount = Math.min(left, want);
+      left = cents(left - amount);
+      return { name: c.name || "Unnamed", amount, short: cents(want - amount) };
+    });
+    const dated = plan.goals.filter((g) => remaining(g) > 0 && g.date).map((g) => ({ goal: g, need: perPaycheque(g) }));
+    const totalNeed = cents(dated.reduce((t, x) => t + x.need, 0));
+    const factor = totalNeed > left && totalNeed > 0 ? left / totalNeed : 1;
+    const goals = dated.map((x) => ({ ...x, amount: Math.floor(x.need * factor * 100) / 100 }));
+    left = cents(left - goals.reduce((t, x) => t + x.amount, 0));
+    if (factor < 1 && goals.length) { goals[0].amount = cents(goals[0].amount + left); left = 0; }
+
+    let extra = null;
+    if (left > 0 && plan.extraTo) {
+      const [kind, id] = plan.extraTo.split(":");
+      if (kind === "goal") {
+        const g = plan.goals.find((x) => x.id === id);
+        if (g) {
+          const already = (goals.find((x) => x.goal === g) || {}).amount || 0;
+          const room = Math.max(0, cents(remaining(g) - already));
+          const amount = Math.min(left, room);
+          if (amount > 0) { extra = { goal: g, accountId: g.accountId, label: g.name, amount }; left = cents(left - amount); }
+        }
+      } else if (acc.accounts.some((a) => a.id === id)) {
+        extra = { accountId: id, label: accountName(id), amount: left }; left = 0;
+      }
+    }
+
+    const spendTotal = cents(spend.reduce((t, x) => t + x.amount, 0));
+    const saveTotal = cents(goals.reduce((t, x) => t + x.amount, 0) + (extra ? extra.amount : 0));
+    const byAccount = new Map();
+    const add = (id, amt) => { if (amt > 0) byAccount.set(id || "", cents((byAccount.get(id || "") || 0) + amt)); };
+    goals.forEach((x) => add(x.goal.accountId, x.amount));
+    if (extra) add(extra.accountId, extra.amount);
+    return { pay, spend, spendTotal, goals, extra, saveTotal, unassigned: left, short: factor < 1, totalNeed, shortSpend: cents(spend.reduce((t, x) => t + x.short, 0)), transfers: [...byAccount].map(([id, amount]) => ({ accountId: id, name: accountName(id), amount })) };
+  }
+
+  /* ---------- payday view ---------- */
+  function renderPayday() {
+    const configured = plan.categories.length > 0 || plan.goals.length > 0;
+    $("pay-setup").hidden = configured;
+    const show = configured && payAmount > 0;
+    $("plan-out").hidden = !show;
+    $("pay-hint").hidden = show || !configured;
+    const hist = (plan.paydays || []).slice(-6).reverse();
+    $("hist-section").hidden = !hist.length;
+    $("history").replaceChildren(...hist.map((p) => el("li", {},
+      el("span", { class: "name" }, new Date(p.date).toLocaleDateString("en-CA", { weekday: "short", month: "short", day: "numeric" })),
+      el("span", { class: "num" }, `${money(p.saved)} saved`),
+      el("span", { class: "meta" }, `${money(p.pay)} paycheque · ${money(p.spend)} for spending` + (p.moves && p.moves.length ? " · " + p.moves.map((m) => `${money(m.amount)} to ${m.name}`).join(", ") : "")))));
+    if (!show) return;
+
+    const r = allocate(payAmount);
+    $("p-spend").textContent = money(r.spendTotal + r.unassigned);
+    $("p-save").textContent = money(r.saveTotal);
+    $("pb-spend").style.width = r.pay ? ((r.spendTotal + r.unassigned) / r.pay * 100) + "%" : "0%";
+    $("pb-save").style.width = r.pay ? (r.saveTotal / r.pay * 100) + "%" : "0%";
+
+    const notes = [];
+    if (r.shortSpend > 0) notes.push(["bad", `This cheque doesn't cover your spending limits. You're ${money(r.shortSpend)} short, so nothing goes to goals this time.`]);
+    else if (r.short) notes.push(["warn", `Your dated goals need ${money(r.totalNeed)} this payday, but only ${money(r.saveTotal)} is left after spending, so each goal gets a share. To stay on track, push a goal's date back or lower a spending limit.`]);
+    if (r.unassigned > 0) notes.push(["warn", `${money(r.unassigned)} has nowhere to go and stays in chequing. Pick where extra money goes on the Goals tab.`]);
+    if (!r.short && !r.shortSpend && r.saveTotal > 0) notes.push(["good", `You're saving ${Math.round(r.saveTotal / r.pay * 100)}% of this paycheque.`]);
+    $("pay-notes").replaceChildren(...notes.map(([k, t]) => el("div", { class: `note ${k}` }, t)));
+
+    $("transfers").replaceChildren(...(r.transfers.length ? r.transfers.map((t) => el("li", {},
+      el("span", { class: "what" }, `To ${t.name}`), el("span", { class: "amt" }, money(t.amount))))
+      : [el("li", {}, el("span", { class: "why" }, "No transfers this time. Everything stays in chequing."))]));
+
+    const goalRows = r.goals.map((x) => el("li", {},
+      el("span", { class: "what" }, x.goal.name), el("span", { class: "amt" }, money(x.amount)),
+      el("span", { class: "why" }, `${money(remaining(x.goal))} to go by ${fmtDate(x.goal.date)} · ${paydaysLeft(x.goal)} paydays left · into ${accountName(x.goal.accountId)}`)));
+    if (r.extra) goalRows.push(el("li", {},
+      el("span", { class: "what" }, `Extra to ${r.extra.label}`), el("span", { class: "amt" }, money(r.extra.amount)),
+      el("span", { class: "why" }, "What's left after spending and goals")));
+    $("goal-out").replaceChildren(...(goalRows.length ? goalRows : [el("li", {}, el("span", { class: "why" }, "No goals with a date yet. Add one on the Goals tab."))]));
+
+    const spendRows = r.spend.map((s) => el("li", {}, el("span", { class: "what" }, s.name), el("span", { class: "amt" }, money(s.amount)),
+      s.short > 0 ? el("span", { class: "why" }, `${money(s.short)} short of your limit`) : null));
+    if (r.unassigned > 0) spendRows.push(el("li", {}, el("span", { class: "what" }, "Unassigned"), el("span", { class: "amt" }, money(r.unassigned))));
+    $("spend-out").replaceChildren(...spendRows);
+
+    $("payday-done").disabled = !(r.saveTotal > 0);
+  }
+
+  $("pay-amount").addEventListener("input", (e) => { payAmount = cents(num(e.target.value)); $("payday-msg").textContent = ""; renderPayday(); });
+
+  let paydayArmed = false;
+  $("payday-done").addEventListener("click", () => {
+    if (!paydayArmed) {
+      paydayArmed = true; $("payday-done").textContent = "Tap again to confirm";
+      setTimeout(() => { paydayArmed = false; $("payday-done").textContent = "I moved the money"; }, 5000);
+      return;
+    }
+    paydayArmed = false; $("payday-done").textContent = "I moved the money";
+    const r = allocate(payAmount);
+    const apply = $("payday-apply").checked;
+    if (apply) {
+      const now = Date.now();
+      for (const x of r.goals) x.goal.saved = cents(num(x.goal.saved) + x.amount);
+      if (r.extra && r.extra.goal) r.extra.goal.saved = cents(num(r.extra.goal.saved) + r.extra.amount);
+      acc.accounts = acc.accounts.map((a) => {
+        const t = r.transfers.find((x) => x.accountId === a.id);
+        return t ? { ...a, balance: cents(num(a.balance) + t.amount), updated: now } : a;
+      });
+      saveNow("acc"); renderAccounts();
+    }
+    plan.paydays = [...(plan.paydays || []), { date: Date.now(), pay: r.pay, spend: r.spendTotal, saved: r.saveTotal, moves: r.transfers, applied: apply }].slice(-60);
+    saveNow("plan");
+    payAmount = 0; $("pay-amount").value = "";
+    renderGoals(); renderPayday();
+    $("payday-msg").textContent = "";
+    $("pay-hint").hidden = false;
+    $("pay-hint").textContent = `Logged ${money(r.saveTotal)} saved from your ${money(r.pay)} paycheque.` + (apply ? " Your balances and goals are updated." : "");
+  });
+
+  /* ---------- goals view ---------- */
+  function savingsAccounts() { return acc.accounts; }
+
+  function renderGoals() {
+    $("pay-freq").value = plan.frequency || "biweekly";
+    // goals list
+    const ul = $("goal-list");
+    ul.replaceChildren();
+    if (!plan.goals.length && !(editing && editing.list === "goals")) ul.append(el("li", { class: "empty" }, "No goals yet. Try an emergency fund, maxing your TFSA this year, or a trip."));
+    for (const g of plan.goals) {
+      if (editing && editing.list === "goals" && editing.id === g.id) continue;
+      const pct = num(g.target) ? Math.min(100, num(g.saved) / num(g.target) * 100) : 0;
+      const per = perPaycheque(g);
+      const meta = [el("span", { class: "chip" }, accountName(g.accountId))];
+      if (remaining(g) <= 0) meta.push(el("span", {}, "Reached"));
+      else if (g.date) meta.push(el("span", {}, `by ${fmtDate(g.date)}`), el("span", {}, `${money(per)} per paycheque`));
+      else meta.push(el("span", {}, "No date, gets leftover money if you pick it below"));
+      ul.append(el("li", { class: "goal" + (remaining(g) <= 0 ? " done" : "") }, el("button", { class: "row", type: "button", "aria-label": `Edit ${g.name}`, onclick: () => { editing = { list: "goals", id: g.id }; renderGoals(); $("goal-name").focus(); } },
+        el("span", { class: "name" }, g.name),
+        el("span", { class: "amt" }, `${money(g.saved)} / ${money(g.target)}`),
+        el("span", { class: "progress" }, el("span", { style: `width:${pct}%` })),
+        el("span", { class: "meta" }, meta))));
+    }
+    $("goal-sum").textContent = plan.goals.length ? `${money(sum(plan.goals, "saved"))} saved` : "";
+    renderGoalEditor();
+
+    // spending limits
+    $("lim-list").replaceChildren(...plan.categories.map((c) => el("li", {},
+      el("span", { class: "cell" }, el("input", { id: `cat-name-${c.id}`, "aria-label": "Category name", value: c.name, placeholder: "Category", oninput: (e) => { c.name = e.target.value; queueSave("plan"); } })),
+      el("span", { class: "cell amount" }, el("input", { id: `cat-limit-${c.id}`, "aria-label": `Limit for ${c.name || "this category"}`, type: "number", inputmode: "decimal", step: "0.01", min: "0", placeholder: "0.00", value: c.limit || "", oninput: (e) => { c.limit = cents(num(e.target.value)); $("lim-sum").textContent = money(sum(plan.categories, "limit")); queueSave("plan"); } })),
+      el("button", { class: "remove", type: "button", "aria-label": `Remove ${c.name || "category"}`, onclick: () => { plan.categories = plan.categories.filter((x) => x !== c); renderGoals(); queueSave("plan"); } }, "×"))));
+    $("lim-sum").textContent = plan.categories.length ? money(sum(plan.categories, "limit")) : "";
+    $("starter-cats").hidden = plan.categories.length > 0;
+
+    // extra money destination
+    const sel = $("extra-to");
+    const opts = [el("option", { value: "" }, "Keep it in chequing")];
+    const og1 = el("optgroup", { label: "Goals" }, plan.goals.filter((g) => remaining(g) > 0).map((g) => el("option", { value: `goal:${g.id}` }, g.name)));
+    const og2 = el("optgroup", { label: "Accounts" }, savingsAccounts().map((a) => el("option", { value: `acct:${a.id}` }, a.name)));
+    if (og1.children.length) opts.push(og1);
+    if (og2.children.length) opts.push(og2);
+    sel.replaceChildren(...opts);
+    sel.value = [...sel.options].some((o) => o.value === plan.extraTo) ? plan.extraTo : "";
+  }
+
+  function renderGoalEditor() {
+    const slot = $("goal-editor-slot");
+    slot.replaceChildren();
+    if (!editing || editing.list !== "goals") return;
+    const existing = editing.id ? plan.goals.find((x) => x.id === editing.id) : null;
+    const v = existing || { name: "", accountId: (acc.accounts.find((a) => a.kind !== "Chequing") || acc.accounts[0] || {}).id || "", target: "", saved: "", date: "" };
+    const err = el("p", { class: "err", hidden: true, role: "alert" });
+    let armed = false;
+    const delBtn = existing ? el("button", { class: "btn danger", type: "button", onclick: () => {
+      if (!armed) { armed = true; delBtn.textContent = "Tap again to delete"; delBtn.classList.add("armed"); return; }
+      plan.goals = plan.goals.filter((x) => x !== existing);
+      if (plan.extraTo === `goal:${existing.id}`) plan.extraTo = "";
+      editing = null; saveNow("plan"); renderGoals(); renderPayday();
+    } }, "Delete") : null;
+
+    const accountOpts = acc.accounts.length
+      ? acc.accounts.map((a) => el("option", { value: a.id, selected: a.id === v.accountId }, `${a.name} (${a.kind})`))
+      : [el("option", { value: "" }, "Chequing (add accounts on the Accounts tab)")];
+    const today = new Date().toISOString().slice(0, 10);
+    const form = el("form", { class: "editor", novalidate: true, onsubmit: (e) => {
+      e.preventDefault();
+      const f = new FormData(form);
+      const name = String(f.get("name") || "").trim();
+      const target = parseFloat(f.get("target"));
+      const date = String(f.get("date") || "");
+      if (!name) { err.textContent = "Give the goal a name, like Emergency fund."; err.hidden = false; return; }
+      if (!Number.isFinite(target) || target <= 0) { err.textContent = "Enter a target amount, like 5000."; err.hidden = false; return; }
+      if (date && date < today) { err.textContent = "Pick a date in the future, or leave it empty."; err.hidden = false; return; }
+      const item = { id: existing ? existing.id : uid(), name, accountId: String(f.get("accountId") || ""), target: cents(target), saved: cents(num(f.get("saved"))), date };
+      plan.goals = existing ? plan.goals.map((x) => x === existing ? item : x) : [...plan.goals, item];
+      editing = null; saveNow("plan"); renderGoals(); renderPayday();
+    } },
+      el("span", { class: "label" }, existing ? `Edit ${existing.name}` : "New goal"),
+      el("div", { class: "fields" },
+        el("div", { class: "field wide" }, el("label", { for: "goal-name" }, "Goal"),
+          el("input", { id: "goal-name", name: "name", value: v.name, placeholder: "e.g. Emergency fund, Max my TFSA", autocomplete: "off" })),
+        el("div", { class: "field" }, el("label", { for: "goal-target" }, "Target ($)"),
+          el("input", { id: "goal-target", name: "target", type: "number", inputmode: "decimal", step: "0.01", min: "0", value: v.target, placeholder: "5000" })),
+        el("div", { class: "field" }, el("label", { for: "goal-saved" }, "Saved so far ($)"),
+          el("input", { id: "goal-saved", name: "saved", type: "number", inputmode: "decimal", step: "0.01", min: "0", value: v.saved, placeholder: "0" })),
+        el("div", { class: "field" }, el("label", { for: "goal-date" }, "Reach it by"),
+          el("input", { id: "goal-date", name: "date", type: "date", min: today, value: v.date }),
+          el("span", { class: "hint" }, "Optional. Without a date, the goal only gets leftover money.")),
+        el("div", { class: "field" }, el("label", { for: "goal-acct" }, "Save it in"),
+          el("select", { id: "goal-acct", name: "accountId" }, accountOpts))),
+      err,
+      el("div", { class: "actions" },
+        el("button", { class: "btn primary", type: "submit" }, "Save goal"),
+        el("button", { class: "btn", type: "button", onclick: () => { editing = null; renderGoals(); } }, "Cancel"),
+        el("span", { class: "spacer" }), delBtn));
+    slot.append(form);
+  }
+
+  $("add-goal").addEventListener("click", () => { editing = { list: "goals", id: null }; renderGoals(); $("goal-name").focus(); });
+  $("pay-freq").addEventListener("change", (e) => { plan.frequency = e.target.value; saveNow("plan"); renderGoals(); renderPayday(); });
+  $("extra-to").addEventListener("change", (e) => { plan.extraTo = e.target.value; saveNow("plan"); renderPayday(); });
+  $("add-cat").addEventListener("click", () => {
+    const c = { id: uid(), name: "", limit: 0 };
+    plan.categories.push(c); renderGoals(); queueSave("plan");
+    $(`cat-name-${c.id}`).focus();
+  });
+  $("starter-cats").addEventListener("click", () => {
+    plan.categories = STARTER.map((name) => ({ id: uid(), name, limit: 0 }));
+    renderGoals(); queueSave("plan");
+    $(`cat-limit-${plan.categories[0].id}`).focus();
+  });
+
+  /* ---------- accounts view ---------- */
+  function renderAccounts() {
+    const have = sum(acc.accounts), owe = sum(acc.debts), net = have - owe;
+    $("net").textContent = money(net);
+    $("net").classList.toggle("neg", net < 0);
+    $("tot-have").textContent = money(have);
+    $("tot-owe").textContent = money(owe);
+    const total = have + owe;
+    $("bar-have").style.width = total ? (have / total * 100) + "%" : "0%";
+    $("bar-owe").style.width = total ? (owe / total * 100) + "%" : "0%";
+    $("acc-sum").textContent = acc.accounts.length ? money(have) : "";
+    $("debt-sum").textContent = acc.debts.length ? money(owe) : "";
+    renderList("accounts", $("acc-list"), "No accounts yet. Add your chequing, savings and TFSA with today's balances.");
+    renderList("debts", $("debt-list"), "Nothing owed yet. Add credit cards, loans or money you owe someone.");
+    renderEditor("accounts", $("acc-editor-slot"));
+    renderEditor("debts", $("debt-editor-slot"));
+  }
+
+  function renderList(list, ul, emptyText) {
+    ul.replaceChildren();
+    if (!acc[list].length) { ul.append(el("li", { class: "empty" }, emptyText)); return; }
+    for (const x of acc[list]) {
+      if (editing && editing.list === list && editing.id === x.id) continue;
+      const meta = [el("span", { class: "chip" }, x.kind)];
+      if (list === "debts") {
+        if (x.rate) meta.push(el("span", {}, `${x.rate}% interest`));
+        if (x.minPayment) meta.push(el("span", {}, `${money(x.minPayment)} minimum`));
+      }
+      if (x.updated) meta.push(el("span", {}, "Updated " + new Date(x.updated).toLocaleDateString("en-CA", { month: "short", day: "numeric" })));
+      ul.append(el("li", {}, el("button", { class: "row", type: "button", "aria-label": `Edit ${x.name}`, onclick: () => { editing = { list, id: x.id }; renderAccounts(); focusFirst(list); } },
+        el("span", { class: "name" }, x.name),
+        el("span", { class: "amt" }, money(x.balance)),
+        el("span", { class: "meta" }, meta))));
+    }
+  }
+
+  function renderEditor(list, slot) {
+    slot.replaceChildren();
+    if (!editing || editing.list !== list) return;
+    const isDebt = list === "debts";
+    const existing = editing.id ? acc[list].find((x) => x.id === editing.id) : null;
+    const kinds = isDebt ? DEBT_KINDS : ACCOUNT_KINDS;
+    const p = isDebt ? "debt" : "acc";
+    const v = existing || { name: "", kind: kinds[0], balance: "", rate: "", minPayment: "" };
+
+    const err = el("p", { class: "err", hidden: true, role: "alert" });
+    let deleteArmed = false;
+    const delBtn = existing ? el("button", { class: "btn danger", type: "button", onclick: () => {
+      if (!deleteArmed) { deleteArmed = true; delBtn.textContent = "Tap again to delete"; delBtn.classList.add("armed"); return; }
+      acc[list] = acc[list].filter((x) => x.id !== existing.id);
+      if (!isDebt && plan.extraTo === `acct:${existing.id}`) { plan.extraTo = ""; saveNow("plan"); }
+      editing = null; saveNow("acc"); renderAll();
+    } }, "Delete") : null;
+
+    const fields = [
+      el("div", { class: "field wide" }, el("label", { for: `${p}-name` }, "Name"),
+        el("input", { id: `${p}-name`, name: "name", value: v.name, placeholder: isDebt ? "e.g. Visa card" : "e.g. EQ Bank TFSA", autocomplete: "off" })),
+      el("div", { class: "field" }, el("label", { for: `${p}-kind` }, "Type"),
+        el("select", { id: `${p}-kind`, name: "kind" }, kinds.map((k) => el("option", { value: k, selected: k === v.kind }, k)))),
+      el("div", { class: "field" }, el("label", { for: `${p}-bal` }, isDebt ? "Amount owed ($)" : "Balance ($)"),
+        el("input", { id: `${p}-bal`, name: "balance", type: "number", inputmode: "decimal", step: "0.01", min: "0", value: v.balance, placeholder: "0.00" })),
+    ];
+    if (isDebt) {
+      fields.push(
+        el("div", { class: "field" }, el("label", { for: "debt-rate" }, "Interest rate (%)"),
+          el("input", { id: "debt-rate", name: "rate", type: "number", inputmode: "decimal", step: "0.01", min: "0", value: v.rate ?? "", placeholder: "Optional" })),
+        el("div", { class: "field" }, el("label", { for: "debt-min" }, "Minimum payment ($)"),
+          el("input", { id: "debt-min", name: "minPayment", type: "number", inputmode: "decimal", step: "0.01", min: "0", value: v.minPayment ?? "", placeholder: "Optional" })));
+    }
+
+    const form = el("form", { class: "editor", novalidate: true, onsubmit: (e) => {
+      e.preventDefault();
+      const f = new FormData(form);
+      const name = String(f.get("name") || "").trim();
+      const balance = parseFloat(f.get("balance"));
+      if (!name) { err.textContent = "Give it a name so you can tell it apart."; err.hidden = false; return; }
+      if (!Number.isFinite(balance) || balance < 0) { err.textContent = "Enter the balance as a number, like 1250.00."; err.hidden = false; return; }
+      const item = { id: existing ? existing.id : uid(), name, kind: String(f.get("kind")), balance: cents(balance), updated: Date.now() };
+      if (isDebt) {
+        const rate = parseFloat(f.get("rate")), minP = parseFloat(f.get("minPayment"));
+        if (Number.isFinite(rate)) item.rate = rate;
+        if (Number.isFinite(minP)) item.minPayment = cents(minP);
+      }
+      acc[list] = existing ? acc[list].map((x) => x.id === existing.id ? item : x) : [...acc[list], item];
+      editing = null; saveNow("acc"); renderAll();
+    } },
+      el("span", { class: "label" }, existing ? `Edit ${existing.name}` : (isDebt ? "New debt" : "New account")),
+      el("div", { class: "fields" }, fields),
+      err,
+      el("div", { class: "actions" },
+        el("button", { class: "btn primary", type: "submit" }, "Save"),
+        el("button", { class: "btn", type: "button", onclick: () => { editing = null; renderAccounts(); } }, "Cancel"),
+        el("span", { class: "spacer" }), delBtn));
+    slot.append(form);
+  }
+
+  function focusFirst(list) { const i = $(list === "debts" ? "debt-name" : "acc-name"); if (i) i.focus(); }
+  $("add-acc").addEventListener("click", () => { editing = { list: "accounts", id: null }; renderAccounts(); focusFirst("accounts"); });
+  $("add-debt").addEventListener("click", () => { editing = { list: "debts", id: null }; renderAccounts(); focusFirst("debts"); });
+
+  function renderAll() { renderAccounts(); renderGoals(); renderPayday(); }
+
+  /* ---------- saving ---------- */
+  const timers = {}, pending = {};
+  function queueSave(which) { pending[which] = true; clearTimeout(timers[which]); timers[which] = setTimeout(() => saveNow(which), 600); setSync("Saving…"); }
+  async function saveNow(which) {
+    clearTimeout(timers[which]);
+    const body = which === "acc"
+      ? { accounts: acc.accounts, debts: acc.debts, updatedAt: Date.now() }
+      : { frequency: plan.frequency, categories: plan.categories.map((c) => ({ id: c.id, name: c.name, limit: cents(c.limit) })), goals: plan.goals, extraTo: plan.extraTo || "", paydays: plan.paydays, updatedAt: Date.now() };
+    try { localStorage.setItem(which === "acc" ? LOCAL_ACC : LOCAL_PLAN, JSON.stringify(body)); } catch (e) {}
+    const ref = which === "acc" ? accRef : planRef;
+    if (!ref) { pending[which] = false; setSync("Saved on this device"); return; }
+    setSync("Saving…");
+    try { await ref.set(body); pending[which] = false; setSync("Saved"); }
+    catch (e) {
+      pending[which] = false;
+      if (e && e.code === "unavailable") {
+        setTimeout(async () => { try { await ref.set(body); setSync("Saved"); } catch { setSync("Couldn't save. Your last change is kept on this device."); } }, 800 + Math.random() * 800);
+      } else setSync("Couldn't save. Your last change is kept on this device.");
+    }
+  }
+
+  function loadAcc(d) { if (d) acc = { accounts: Array.isArray(d.accounts) ? d.accounts : [], debts: Array.isArray(d.debts) ? d.debts : [] }; }
+  function loadPlan(d) {
+    if (!d) return;
+    plan = {
+      frequency: d.frequency || "biweekly",
+      categories: Array.isArray(d.categories) ? d.categories : [],
+      goals: Array.isArray(d.goals) ? d.goals : [],
+      extraTo: typeof d.extraTo === "string" ? d.extraTo : "",
+      paydays: Array.isArray(d.paydays) ? d.paydays : [],
+    };
+  }
+  const busy = () => { const a = document.activeElement; return (a && (a.tagName === "INPUT" || a.tagName === "SELECT") && a.id !== "pay-amount") || !!editing; };
+
+  try { loadAcc(JSON.parse(localStorage.getItem(LOCAL_ACC) || "null")); } catch (e) {}
+  try { loadPlan(JSON.parse(localStorage.getItem(LOCAL_PLAN) || "null")); } catch (e) {}
+  let startTab = "payday";
+  try { startTab = localStorage.getItem(LOCAL_TAB) || "payday"; } catch (e) {}
+  const hash = location.hash.slice(1);
+  if (TABS[hash]) startTab = hash;
+  showTab(startTab);
+  renderAll();
+
+  (async () => {
+    const db = window.claude && window.claude.use ? await window.claude.use("db") : null;
+    if (!db) { setSync("Saved on this device"); return; }
+    accRef = db.doc("budget/accounts");
+    planRef = db.doc("budget/plan");
+    const onErr = () => setSync("Couldn't reach your saved numbers. Changes stay on this device.");
+    accRef.onSnapshot((snap) => {
+      if (snap.metadata && snap.metadata.hasPendingWrites) return;
+      if (snap.exists) { if (!pending.acc) loadAcc(snap.data()); if (!busy()) renderAll(); }
+      else if (acc.accounts.length || acc.debts.length) saveNow("acc");
+      setSync("Saved");
+    }, onErr);
+    planRef.onSnapshot((snap) => {
+      if (snap.metadata && snap.metadata.hasPendingWrites) return;
+      if (snap.exists) { if (!pending.plan && !busy()) { loadPlan(snap.data()); renderAll(); } }
+      else if (plan.categories.length || plan.goals.length) saveNow("plan");
+    }, onErr);
+  })();
+})();
+</script>
+
+</html>
