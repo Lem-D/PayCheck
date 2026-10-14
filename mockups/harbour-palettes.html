@@ -1,0 +1,190 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Harbour Palettes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one band per palette, light and dark phones side by side, with a switch for which screens are shown. */
+:root{
+  --bg:#f3f4f6; --fg:#16181d; --muted:#5d636e; --line:#d9dce2; --card:#ffffff; --accent:#3b4bd8; --accent-ink:#fff;
+  --page-font:"Figtree",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121419;--fg:#e8eaee;--muted:#9aa1ad;--line:#2b2f38;--card:#1b1e25;--accent:#8e9bff;--accent-ink:#0b0f2e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121419;--fg:#e8eaee;--muted:#9aa1ad;--line:#2b2f38;--card:#1b1e25;--accent:#8e9bff;--accent-ink:#0b0f2e;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--page-font);font-size:15px;line-height:1.5}
+.page{max-width:1180px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header h1{font-size:30px;margin:0 0 6px;text-wrap:balance;letter-spacing:-.01em}
+header p{margin:0;color:var(--muted);max-width:68ch}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 0}
+.ctrl span{font-size:13px;color:var(--muted);margin-right:4px}
+.ctrl button{font:inherit;font-size:14px;font-weight:500;color:var(--fg);background:var(--card);border:1px solid var(--line);padding:6px 14px;border-radius:999px;cursor:pointer}
+.ctrl button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.ctrl button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+section.opt{margin-top:36px;padding-top:26px;border-top:1px solid var(--line)}
+.opthead{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px;justify-content:space-between}
+.opthead h2{margin:0;font-size:22px;letter-spacing:-.01em}
+.tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.note{margin:6px 0 0;max-width:70ch}
+.sws{display:flex;flex-direction:column;gap:5px}
+.sw{display:flex;gap:5px;align-items:center}
+.sw em{font-style:normal;font-size:11px;color:var(--muted);width:34px}
+.sw span{width:22px;height:22px;border-radius:50%;border:1px solid var(--line)}
+.row{display:flex;gap:20px;overflow-x:auto;padding:18px 2px 10px;scroll-snap-type:x mandatory}
+.shot{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px;align-items:center;margin:0}
+.shot figcaption{font-size:13px;color:var(--muted);font-weight:500}
+
+.phone{width:252px;height:530px;border-radius:34px;padding:8px;background:#0b0c0f;box-shadow:0 1px 2px rgba(0,0,0,.2),0 10px 30px rgba(10,15,30,.14)}
+.scr{position:relative;width:100%;height:100%;border-radius:27px;overflow:hidden;background:var(--p-bg);color:var(--p-ink);font-family:"Outfit",system-ui,sans-serif;font-size:12px;line-height:1.35;display:flex;flex-direction:column}
+.sb{display:flex;justify-content:space-between;padding:9px 18px 4px;font-size:10.5px;font-weight:600;flex:0 0 auto}
+.body{flex:1 1 auto;overflow:hidden;padding:4px 14px 10px;display:flex;flex-direction:column;gap:9px}
+.num{font-variant-numeric:tabular-nums}
+.mu{color:var(--p-muted)}
+.r{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.bar{height:6px;border-radius:9px;background:var(--p-track);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.ttl{font-size:15px;font-weight:700}
+.tile{background:var(--p-surface);border-radius:16px;padding:10px;box-shadow:var(--p-shadow)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ringwrap{position:relative;display:grid;place-items:center;margin:2px auto 0}
+.ringwrap .c{position:absolute;text-align:center}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;background:var(--p-track);color:var(--p-muted)}
+.tabs{flex:0 0 auto;display:flex;justify-content:space-around;margin:0 12px 12px;border-radius:18px;padding:8px 6px;background:var(--p-surface);box-shadow:var(--p-shadow)}
+.tabs b{font-size:10px;font-weight:600;color:var(--p-muted);display:flex;flex-direction:column;align-items:center;gap:3px}
+.tabs b::before{content:"";width:18px;height:18px;border-radius:6px;background:var(--p-track)}
+.tabs b.on{color:var(--p-accent)}
+.tabs b.on::before{background:var(--p-accent)}
+.btn{background:var(--p-accent);color:var(--p-accent-ink);text-align:center;border-radius:14px;padding:9px;font-weight:700}
+.diff .tsave{background:color-mix(in srgb,var(--p-accent) 13%,var(--p-surface))}
+.diff .tspend{background:color-mix(in srgb,var(--p-spend) 11%,var(--p-surface))}
+.dline{margin:0 -10px;padding:3px 10px;background:color-mix(in srgb,var(--p-accent) 12%,transparent)}
+.dline i{font-style:normal;color:var(--p-accent);font-weight:700;display:inline-block;width:12px}
+.debt{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--p-bad) 35%,transparent)}
+</style>
+
+<div class="page">
+  <header>
+    <h1>Harbour palettes</h1>
+    <p>The rings and tiles layout in fifteen colour palettes. Harbour Gold is first, then four green and red ones that work like a code diff (green is money added, red is money spent), then the gold and warm-metal ones, then the four from the start. Each has a light and a dark version, and the app would switch between them with your phone's setting. In every palette one colour means saving (the ring, goals, the main button) and another means spending.</p>
+    <nav class="ctrl" aria-label="Palettes" id="jump"></nav>
+    <div class="ctrl" role="group" aria-label="Screens shown">
+      <span>Show</span>
+      <button id="s-a" type="button" aria-pressed="true" data-set="a">Payday and Spending</button>
+      <button id="s-b" type="button" aria-pressed="false" data-set="b">Goals and Accounts</button>
+    </div>
+  </header>
+  <main id="opts"></main>
+  <p class="mu" style="margin-top:36px;color:var(--muted);font-size:14px">All figures are made-up examples. Swipe sideways on a row to see all four phones.</p>
+</div>
+
+<script>
+const $ = n => "$" + Math.abs(n).toLocaleString("en-CA",{maximumFractionDigits:2});
+const D = {
+  spend:1500, save:650,
+  cats:[{n:"Rent",l:900,s:900,bill:1},{n:"Groceries",l:250,s:188},{n:"Transit",l:120,s:60},{n:"Eating out",l:100,s:104},{n:"Fun money",l:75,s:30},{n:"Phone",l:55,s:0,bill:1}],
+  goals:[{n:"Emergency fund",t:5000,v:3100,get:400,by:"Mar 2027"},{n:"Japan trip",t:4000,v:1350,get:250,by:"Jun 2027"}],
+  accts:[{n:"Chequing",k:"Chequing",b:1240},{n:"EQ Savings",k:"Savings",b:3100},{n:"TFSA",k:"TFSA",b:7800}],
+  debts:[{n:"Visa",k:"Credit card",b:1420,rate:"20.99%"},{n:"Car loan",k:"Car loan",b:8900,rate:"6.4%"}],
+  moves:[{n:"EQ Savings",a:400},{n:"TFSA",a:250}]
+};
+const have=D.accts.reduce((s,a)=>s+a.b,0), owe=D.debts.reduce((s,a)=>s+a.b,0), net=have-owe;
+const spentAll=D.cats.reduce((s,c)=>s+c.s,0), limAll=D.cats.reduce((s,c)=>s+c.l,0);
+const leftAll=D.cats.reduce((s,c)=>s+Math.max(0,c.l-c.s),0);
+const pct=(a,b)=>Math.min(100,Math.round(a/b*100));
+const state=c=>c.bill&&c.s>=c.l?"paid":c.s>=c.l?"over":c.s/c.l>=.75?"warn":"ok";
+const stColor=c=>({paid:"var(--p-muted)",over:"var(--p-bad)",warn:"var(--p-warn)",ok:"var(--p-spend)"})[state(c)];
+let DIFF=false; const sg=x=>DIFF?x:"";
+const sb=()=>`<div class="sb"><span>9:41</span><span>●●● ▮</span></div>`;
+const tabs=on=>`<div class="tabs">${["Payday","Spending","Goals","Accounts"].map(n=>`<b class="${n===on?"on":""}">${n}</b>`).join("")}</div>`;
+const ring=(p,size,sw,col,track="var(--p-track)")=>{const r=(size-sw)/2,C=2*Math.PI*r;return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${track}" stroke-width="${sw}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${C*p/100} ${C}" transform="rotate(-90 ${size/2} ${size/2})"/></svg>`;};
+
+const S = {
+  Payday:()=>`${sb()}<div class="body">
+    <div class="r"><span class="ttl">Payday</span><span class="pill">Fri Oct 10</span></div>
+    <div class="ringwrap">${ring(30,150,14,"var(--p-accent)","var(--p-spend)")}<div class="c"><div class="mu" style="font-size:10px">I got paid</div><div class="num" style="font-size:24px;font-weight:600">$2,150</div><div style="color:var(--p-accent);font-weight:600;font-size:11px">30% saved</div></div></div>
+    <div class="grid"><div class="tile tspend"><div class="mu" style="font-size:10px">Spend</div><div class="num" style="font-size:17px;font-weight:600;color:var(--p-spend)">${sg("−")}${$(D.spend)}</div></div><div class="tile tsave"><div class="mu" style="font-size:10px">Save</div><div class="num" style="font-size:17px;font-weight:600;color:var(--p-accent)">${sg("+")}${$(D.save)}</div></div></div>
+    <div class="tile" style="display:flex;flex-direction:column;gap:6px"><div class="mu" style="font-size:10px">Move now</div>${D.moves.map(m=>DIFF?`<div class="r dline"><span><i>+</i>${m.n}</span><b class="num" style="color:var(--p-accent)">+${$(m.a)}</b></div>`:`<div class="r"><span>→ ${m.n}</span><b class="num">${$(m.a)}</b></div>`).join("")}</div>
+    <div class="btn">I moved the money</div>
+  </div>${tabs("Payday")}`,
+  Spending:()=>`${sb()}<div class="body">
+    <div class="r"><span class="ttl">This pay period</span><span class="pill">9 days left</span></div>
+    <div class="tile r" style="align-items:center"><div><div class="mu" style="font-size:10px">Left to spend</div><div class="num" style="font-size:22px;font-weight:600">${$(leftAll)}</div></div>${ring(pct(spentAll,limAll),46,6,"var(--p-spend)")}</div>
+    <div class="grid">${D.cats.map(c=>`<div class="tile" style="display:flex;flex-direction:column;gap:5px"><span class="mu" style="font-size:10.5px">${c.n}</span><b class="num" style="font-size:14px;color:${stColor(c)}">${state(c)==="paid"?"Paid":state(c)==="over"?"−"+$(c.s-c.l):$(c.l-c.s)}</b><div class="bar" style="height:4px"><i style="width:${pct(c.s,c.l)}%;background:${stColor(c)}"></i></div></div>`).join("")}</div>
+  </div>${tabs("Spending")}`,
+  Goals:()=>`${sb()}<div class="body"><span class="ttl">Goals</span>
+    ${D.goals.map(g=>`<div class="tile" style="display:flex;gap:10px;align-items:center"><div class="ringwrap" style="margin:0">${ring(pct(g.v,g.t),58,7,"var(--p-accent)")}<div class="c num" style="font-size:12px;font-weight:600">${pct(g.v,g.t)}%</div></div><div style="flex:1"><b style="font-size:13px">${g.n}</b><div class="mu num" style="font-size:10.5px">${$(g.v)} of ${$(g.t)}</div><div style="font-size:10.5px;margin-top:3px"><span style="color:var(--p-accent);font-weight:600">${sg("+")}${$(g.get)}</span><span class="mu"> per pay · ${g.by}</span></div></div></div>`).join("")}
+    <div class="tile"><div class="mu" style="font-size:10px">Anything left over</div><div style="font-weight:600;margin-top:2px">→ Japan trip</div></div>
+    <div class="tile" style="box-shadow:none;border:1px dashed var(--p-line);background:transparent;text-align:center;color:var(--p-muted)">+ New goal</div>
+  </div>${tabs("Goals")}`,
+  Accounts:()=>`${sb()}<div class="body"><span class="ttl">Accounts</span>
+    <div class="tile"><div class="mu" style="font-size:10px">Net worth</div><div class="num" style="font-size:26px;font-weight:600;color:var(--p-good)">${$(net)}</div><div class="bar" style="margin-top:6px"><i style="width:${have/(have+owe)*100}%;background:var(--p-good)"></i><i style="flex:1;background:var(--p-bad)"></i></div><div class="r mu" style="font-size:10px;margin-top:4px"><span>Have ${$(have)}</span><span>Owe ${$(owe)}</span></div></div>
+    <div class="grid">${D.accts.map(a=>`<div class="tile"><div class="mu" style="font-size:10px">${a.k}</div><b>${a.n}</b><div class="num" style="font-size:14px;font-weight:600">${$(a.b)}</div></div>`).join("")}${D.debts.map(a=>`<div class="tile debt"><div class="mu" style="font-size:10px">${a.k} · ${a.rate}</div><b>${a.n}</b><div class="num" style="font-size:14px;font-weight:600;color:var(--p-bad)">${sg("−")}${$(a.b)}</div></div>`).join("")}</div>
+  </div>${tabs("Accounts")}`
+};
+
+// bg, surface, ink, muted, line, track, accent (saving), accentInk, spend, good, bad, warn
+const P = [
+  {id:"gold",name:"Harbour Gold",tag:"Your favourite so far",note:"Gold for saving and sky blue for spending. The light version swaps navy for a cool blue-white and deepens the gold so it stays readable.",
+   light:["#f2f5fa","#ffffff","#13203a","#5f6b82","#dfe5ef","#e3e9f2","#c48410","#1b1405","#2f6fd6","#1f9a6c","#d24a3c","#c27a00"],
+   dark: ["#0e1626","#152036","#eef2f8","#8e9ab0","#24314b","#24314b","#f2bf4b","#1b1405","#6fb6ff","#5fd3a5","#ff7a6b","#f2bf4b"]},
+  {id:"github",name:"GitHub Diff",tag:"New · green and red",diff:true,note:"Taken straight from GitHub's colours. Green is money added or saved, red is money spent, with tinted rows and + and − signs like a code diff. Going over a limit shows in orange so it doesn't blend in with normal spending.",
+   light:["#f6f8fa","#ffffff","#1f2328","#59636e","#d1d9e0","#e6eaef","#1a7f37","#ffffff","#cf222e","#1a7f37","#bc4c00","#9a6700"],
+   dark: ["#0d1117","#161b22","#e6edf3","#8d96a0","#30363d","#21262d","#3fb950","#04260f","#f85149","#3fb950","#f0883e","#d29922"]},
+  {id:"vscode",name:"VS Code Diff",tag:"New · green and red",diff:true,note:"VS Code's Dark+ and Light+ greys with its softer git green and red. Over a limit shows in VS Code's purple.",
+   light:["#f3f3f3","#ffffff","#1e1e1e","#616161","#e5e5e5","#e8e8e8","#388a34","#ffffff","#c72e0f","#388a34","#af00db","#bf8803"],
+   dark: ["#1e1e1e","#252526","#d4d4d4","#9d9d9d","#3c3c3c","#333333","#89d185","#0b2410","#f48771","#89d185","#c586c0","#cca700"]},
+  {id:"harbourdiff",name:"Harbour Diff",tag:"New · green and red on navy",diff:true,note:"Harbour Gold's navy base with green for saving and coral red for spending. Gold stays on as the warning colour, and going over a limit shows in pink.",
+   light:["#f2f5fa","#ffffff","#13203a","#5f6b82","#dfe5ef","#e3e9f2","#1a8a5a","#ffffff","#d24a3c","#1a8a5a","#c0267a","#b37400"],
+   dark: ["#0e1626","#152036","#eef2f8","#8e9ab0","#24314b","#24314b","#5fd3a5","#04241a","#ff7a6b","#5fd3a5","#ff5fa2","#f2bf4b"]},
+  {id:"sage",name:"Sage and Brick",tag:"New · softer green and red",diff:true,note:"A muted sage green and brick red, so the screen doesn't feel like it's flashing warnings at you. Over a limit shows in plum.",
+   light:["#f4f5f2","#ffffff","#1d221c","#636a60","#dfe3dc","#e5e8e2","#3f7d4a","#ffffff","#b5473a","#3f7d4a","#8b3fa8","#a86f00"],
+   dark: ["#121512","#1b201b","#e9ece6","#959c92","#2b322b","#2b322b","#7fc48a","#0d2412","#e8836f","#7fc48a","#c58be0","#e3b95a"]},
+  {id:"brass",name:"Midnight Brass",tag:"New · close to Harbour Gold",note:"Near-black instead of navy, with a softer brushed-brass gold for saving and an icy blue for spending. Harbour Gold, but moodier and more grown-up.",
+   light:["#f3f4f7","#ffffff","#15171c","#62666f","#e0e2e8","#e5e7ec","#a8742a","#ffffff","#4a7fb5","#2a8f68","#c8433a","#b97500"],
+   dark: ["#0b0c10","#16181f","#eceef3","#8c919c","#262a33","#262a33","#d9a35b","#1f1405","#9cc8f0","#6fd0a8","#ff7a6b","#e8b85a"]},
+  {id:"ocean",name:"Ocean Amber",tag:"New · close to Harbour Gold",note:"A deep sea-blue base with amber for saving and bright aqua for spending. Same feel as Harbour Gold with a bit more colour in the background.",
+   light:["#eff5f8","#ffffff","#0f2530","#567080","#d7e5ec","#dce9ef","#d08a00","#241500","#1689a8","#1f9a6c","#d24a3c","#a86400"],
+   dark: ["#0a1c24","#112a35","#e6f2f6","#88a6b3","#1e3a47","#1e3a47","#ffb547","#241500","#4fd1e8","#5fd3a5","#ff7a6b","#ffd166"]},
+  {id:"royal",name:"Royal Gold",tag:"New · gold on purple",note:"Gold for saving on a deep indigo base, with lavender for spending. Richer than Harbour Gold, a little like a premium card.",
+   light:["#f4f2fa","#ffffff","#1c1736","#665f80","#e3dff0","#e8e5f3","#c08a10","#1f1600","#5b45c9","#2a8f68","#cf3c55","#b97500"],
+   dark: ["#120f24","#1b1734","#efecfa","#9a94b8","#2c2650","#2c2650","#f4c45a","#1f1600","#a99bff","#6fd0a8","#ff7a92","#f4c45a"]},
+  {id:"evergold",name:"Evergreen Gold",tag:"New · gold on green",note:"Gold for saving on a deep pine-green base, with mint for spending. Money-green without looking like the current app.",
+   light:["#f0f4f1","#ffffff","#13261d","#5a6e63","#d9e4dd","#dee8e1","#b88300","#1f1600","#2e7d5b","#2e7d5b","#c8433a","#a86400"],
+   dark: ["#0c1a14","#13261e","#e8f2ec","#8fa89a","#21382d","#21382d","#f0c050","#1f1600","#6fd3a2","#6fd3a2","#ff7a6b","#f0c050"]},
+  {id:"copper",name:"Copper Slate",tag:"New · warm metal on grey",note:"Copper for saving and periwinkle for spending on a cool slate grey. Swaps gold for a warmer, redder metal.",
+   light:["#f2f3f5","#ffffff","#1b1f27","#646b78","#dfe2e8","#e4e7ec","#b5592e","#ffffff","#5867c9","#2a8f68","#c22b3a","#b97500"],
+   dark: ["#14171d","#1d2129","#ebedf1","#949aa6","#2c313b","#2c313b","#e8875a","#2a1004","#a3adff","#6fd0a8","#ff6b7a","#f0c050"]},
+  {id:"daybreak",name:"Daybreak",tag:"New · sun and sky",note:"Sunny yellow for saving and clear sky blue for spending. The brightest and most cheerful light mode, with a deep blue night version.",
+   light:["#eef5fc","#ffffff","#0e1f36","#5a6b82","#d8e5f3","#dde9f5","#e3a000","#241800","#0a6fe0","#14a06f","#e23c3c","#b86e00"],
+   dark: ["#0a1730","#112244","#eaf2fd","#8ea3c2","#1e3360","#1e3360","#ffc53d","#241800","#5aa9ff","#4fd1a0","#ff7272","#ffc53d"]},
+  {id:"fjord",name:"Fjord",tag:"Earlier · teal and coral",note:"Teal for saving and coral for spending, on a cool sea-green base. Calm and fresh, and the two main colours are easy to tell apart.",
+   light:["#eef6f5","#ffffff","#10292b","#557072","#d4e5e4","#dbeae9","#0d8a80","#ffffff","#e2664c","#0d8a80","#c41d5b","#c98100"],
+   dark: ["#0b1c1e","#12292c","#e4f2f1","#87a4a5","#1f3b3e","#1f3b3e","#3fd1c2","#04211f","#ff8f78","#3fd1c2","#ff6b9a","#f5bb4a"]},
+  {id:"plum",name:"Plum and Mango",tag:"Earlier · purple and orange",note:"Mango orange for saving and violet for spending. The warmest and most playful of the five, with a deep aubergine dark mode.",
+   light:["#f6f3fa","#ffffff","#231a33","#6d6280","#e6dff0","#ebe5f3","#e07d0e","#2a1600","#6a3fc0","#27956a","#d23c55","#b88a00"],
+   dark: ["#16111f","#211a2e","#f1ecf8","#a297b5","#332a45","#332a45","#ffa94d","#2a1600","#b394ff","#5fd3a5","#ff7088","#ffd25c"]},
+  {id:"graphite",name:"Graphite",tag:"Earlier · neutral with one blue",note:"Plain greys with a single electric blue for saving, and spending in a quiet slate. The most minimal option; your savings are the only colourful thing on screen.",
+   light:["#f4f4f5","#ffffff","#18181b","#63636b","#e2e2e6","#e7e7ea","#3a5bff","#ffffff","#7d8290","#16a34a","#dc2626","#d97706"],
+   dark: ["#0f0f11","#1a1a1e","#f4f4f5","#9a9aa3","#2a2a30","#2a2a30","#6b86ff","#0a0f2e","#7a7f8b","#4ade80","#f87171","#fbbf24"]},
+  {id:"rose",name:"Rose and Indigo",tag:"Earlier · pink and blue",note:"Rose for saving and indigo for spending, on a blush base that turns into a deep wine colour in dark mode. Soft and personal without being pale.",
+   light:["#faf4f5","#ffffff","#241a22","#75666f","#efe1e4","#f1e6e8","#cc3f73","#ffffff","#3b4fb8","#1f9a6c","#b42318","#c27a00"],
+   dark: ["#1a1216","#261a20","#f7ecef","#b29ea7","#3a2830","#3a2830","#ff7aa8","#2b0614","#8fa0ff","#5fd3a5","#ff8a6b","#f5bb4a"]}
+];
+const KEYS=["bg","surface","ink","muted","line","track","accent","accent-ink","spend","good","bad","warn"];
+const vars=(arr,dark)=>KEYS.map((k,i)=>`--p-${k}:${arr[i]}`).join(";")+`;--p-shadow:${dark?"none":"0 1px 2px rgba(20,25,40,.06)"}`;
+const SETS={a:["Payday","Spending"],b:["Goals","Accounts"]};
+let set="a"; try{set=localStorage.getItem("harbour-set")||"a"}catch(e){}
+function render(){
+  document.querySelectorAll(".ctrl button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.set===set));
+  document.getElementById("opts").innerHTML=P.map(p=>`
+  <section class="opt" id="${p.id}">
+    <div class="opthead"><div><div class="tag">${p.tag}</div><h2>${p.name}</h2></div>
+      <div class="sws" aria-label="Palette">${[["Light",p.light],["Dark",p.dark]].map(([l,a])=>`<div class="sw"><em>${l}</em>${[0,1,6,8,10].map(i=>`<span style="background:${a[i]}" title="${a[i]}"></span>`).join("")}</div>`).join("")}</div></div>
+    <p class="note">${p.note}</p>
+    <div class="row">${SETS[set].flatMap(s=>[["Light",p.light,0],["Dark",p.dark,1]].map(([m,a,d])=>`<figure class="shot"><div class="phone"><div class="scr${p.diff?" diff":""}" style="${vars(a,d)}">${(DIFF=!!p.diff,S[s]())}</div></div><figcaption>${s} · ${m}</figcaption></figure>`)).join("")}</div>
+  </section>`).join("");
+}
+document.getElementById("jump").innerHTML=P.map(p=>`<a href="#${p.id}" style="display:inline-flex;align-items:center;gap:6px;color:var(--fg);text-decoration:none;border:1px solid var(--line);background:var(--card);padding:5px 12px 5px 6px;border-radius:999px;font-size:13px;font-weight:500"><span style="width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,${p.dark[0]} 50%,${p.dark[6]} 50%)"></span>${p.name}</a>`).join("");
+document.querySelectorAll(".ctrl button").forEach(b=>b.addEventListener("click",()=>{set=b.dataset.set;try{localStorage.setItem("harbour-set",set)}catch(e){}render();}));
+render();
+</script>
+
+</body></html>

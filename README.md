@@ -5,6 +5,7 @@ A personal budgeting app built around one idea: every paycheque gets split up fr
 ## What's here
 
 - **`mobile/`**: the PayCheck phone app (Expo and React Native, for iOS and Android). This is where new work goes. See [mobile/README.md](mobile/README.md) to run it on your phone.
+- **`mockups/`**: the colour, layout and logo options that were tried, the Harbour Gold design that was picked, and the final logo files in `mockups/logo/`. See [mockups/README.md](mockups/README.md).
 - **`index.html`**: the original single-page prototype. Open it in a browser and it works on its own, saving your numbers in that browser. The hosted version, [Paycheque Plan](https://claude.ai/artifact/9oKM98u3YgoHKojCjcB5Ae), also syncs across devices.
 
 ## Plan

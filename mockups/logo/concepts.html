@@ -1,0 +1,212 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>PayCheck Logo Concepts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one column of concept tiles, each a strip of light, dark, icon and wordmark previews. Harbour Gold tokens. */
+:root {
+  --bg: #f2f5fa; --surface: #ffffff; --ink: #13203a; --muted: #5f6b82; --line: #dfe5ef; --track: #e3e9f2;
+  --accent: #c48410; --spend: #2f6fd6;
+  --font: "Outfit", ui-rounded, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e1626; --surface: #152036; --ink: #eef2f8; --muted: #8e9ab0; --line: #24314b; --track: #24314b;
+  --accent: #f2bf4b; --spend: #6fb6ff; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0e1626; --surface: #152036; --ink: #eef2f8; --muted: #8e9ab0; --line: #24314b; --track: #24314b;
+  --accent: #f2bf4b; --spend: #6fb6ff; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; flex-direction: column; gap: 6px; }
+h1 { margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--accent); }
+.lede { margin: 0; color: var(--muted); max-width: 62ch; }
+.pill { align-self: flex-start; display: inline-block; background: var(--track); color: var(--muted); border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 500; }
+
+.tile { background: var(--surface); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+:root:not([data-theme="dark"]) .tile { box-shadow: 0 1px 2px rgba(20,25,40,.06); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tile { box-shadow: none; } }
+
+.glance { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.shelf { border-radius: 14px; padding: 18px 12px 14px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.shelf.l { background: linear-gradient(160deg, #dbe6f5, #f3ead6); }
+.shelf.d { background: linear-gradient(160deg, #0b1220, #1d2a44); }
+.app { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; font-weight: 500; }
+.shelf.l .app { color: #13203a; } .shelf.d .app { color: #eef2f8; }
+.app svg { width: 100%; max-width: 58px; height: auto; display: block; }
+
+.concept-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.letter { width: 28px; height: 28px; border-radius: 9px; background: var(--accent); color: #1b1405; font-weight: 700;
+  display: inline-grid; place-items: center; font-size: 15px; flex: none; align-self: center; }
+.concept-head h2 { margin: 0; font-size: 20px; font-weight: 600; }
+.concept-head p { margin: 0; color: var(--muted); flex-basis: 100%; max-width: 70ch; }
+
+.strip { display: grid; grid-template-columns: 1fr 1fr 1.35fr; gap: 8px; }
+.cell { border-radius: 12px; display: flex; flex-direction: column; gap: 8px; padding: 12px; min-width: 0; }
+.cell .cap { font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+.cell.l { background: #ffffff; color: #5f6b82; outline: 1px solid #dfe5ef; outline-offset: -1px; }
+.cell.d { background: #0e1626; color: #8e9ab0; }
+.cell.i { background: var(--track); color: var(--muted); }
+.big { display: grid; place-items: center; flex: 1; padding: 6px 0; }
+.big svg { width: 100%; max-width: 132px; height: auto; }
+.lock { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; }
+.lock svg { width: 34px; height: 34px; flex: none; }
+.cell.l .lock { color: #13203a; } .cell.l .lock b { color: #c48410; font-weight: 600; }
+.cell.d .lock { color: #eef2f8; } .cell.d .lock b { color: #f2bf4b; font-weight: 600; }
+.icons { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; flex: 1; }
+.icons figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-variant-numeric: tabular-nums; }
+.icons svg { display: block; }
+
+.group { margin: 12px 0 -6px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+footer { color: var(--muted); font-size: 13px; }
+
+@media (max-width: 760px) {
+  .glance { grid-template-columns: 1fr; }
+  .strip { grid-template-columns: 1fr 1fr; }
+  .strip .cell.i { grid-column: 1 / -1; }
+}
+@media (max-width: 420px) {
+  .shelf { row-gap: 12px; }
+  .lock { font-size: 18px; } .lock svg { width: 28px; height: 28px; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="pill">Harbour Gold · logo round 3</span>
+    <h1>Pay<em>Check</em> logo concepts</h1>
+    <p class="lede">New at the top: K to N, with a straight bill, a small coin stack on the bottom right and a P. M mixes in the ring from A. Earlier rounds are still below. Each is shown on light and dark, as a home-screen icon, and next to the name. Reply in the thread with a letter, or mix two.</p>
+  </header>
+
+  <section class="tile" aria-label="All fourteen as app icons">
+    <div class="concept-head"><h2>On a home screen</h2><p>All fourteen at real icon size, so you can see which still reads when it is small.</p></div>
+    <div class="glance">
+      <div class="shelf d" id="shelf-d"></div>
+      <div class="shelf l" id="shelf-l"></div>
+    </div>
+  </section>
+
+  <div id="concepts" style="display:flex;flex-direction:column;gap:20px"></div>
+
+  <footer>Concept sketches only. Nothing in the app has changed. Once you pick one, it gets cleaned up and exported as the Expo icon, adaptive Android icon and splash.</footer>
+</div>
+
+<script>
+const L = { ink:"#13203a", muted:"#5f6b82", track:"#e3e9f2", accent:"#c48410", accentInk:"#1b1405", spend:"#2f6fd6", paper:"#ffffff", soft:"#c9d3e2", accDark:"#9a6608", bg:"#ffffff" };
+const D = { ink:"#eef2f8", muted:"#8e9ab0", track:"#24314b", accent:"#f2bf4b", accentInk:"#1b1405", spend:"#6fb6ff", paper:"#1d2a44", soft:"#33456a", accDark:"#c9952c", bg:"#0e1626" };
+
+const pt = (cx, cy, r, deg) => { const a = (deg - 90) * Math.PI / 180; return [+(cx + r * Math.cos(a)).toFixed(2), +(cy + r * Math.sin(a)).toFixed(2)]; };
+const arc = (cx, cy, r, a0, a1) => { const [x0,y0] = pt(cx,cy,r,a0), [x1,y1] = pt(cx,cy,r,a1); return `M${x0} ${y0}A${r} ${r} 0 ${a1-a0>180?1:0} 1 ${x1} ${y1}`; };
+const S = 'fill="none" stroke-linecap="round" stroke-linejoin="round"';
+
+// Each mark draws into a 100x100 box.
+const bill = (c, x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h*0.17}" fill="${c.spend}"/>
+  <rect x="${x+5}" y="${y+5}" width="${w-10}" height="${h-10}" rx="${h*0.09}" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2"/>`;
+const dollar = (c, x, y, size) => `<text x="${x}" y="${y}" text-anchor="middle" font-family="Outfit, system-ui, sans-serif" font-weight="700" font-size="${size}" fill="${c.accentInk}">$</text>`;
+const coinStack = (c, ys) => ys.map(yt => `<path d="M48 ${yt}v8a18 6 0 0 0 36 0v-8a18 6 0 0 0-36 0Z" fill="${c.accDark}" stroke="${c.bg}" stroke-width="3"/>
+  <ellipse cx="66" cy="${yt}" rx="18" ry="6" fill="${c.accent}"/><ellipse cx="66" cy="${yt}" rx="11" ry="3.2" fill="none" stroke="${c.accentInk}" stroke-opacity=".3" stroke-width="1.5"/>`).join("");
+
+const stack = (c, cx, rx, ys) => ys.map(yt => `<path d="M${cx-rx} ${yt}v7a${rx} 5.5 0 0 0 ${2*rx} 0v-7a${rx} 5.5 0 0 0-${2*rx} 0Z" fill="${c.accDark}" stroke="${c.bg}" stroke-width="3"/>
+  <ellipse cx="${cx}" cy="${yt}" rx="${rx}" ry="5.5" fill="${c.accent}"/><ellipse cx="${cx}" cy="${yt}" rx="${rx*0.6}" ry="2.8" fill="none" stroke="${c.accentInk}" stroke-opacity=".3" stroke-width="1.5"/>`).join("");
+const flatBill = c => `${bill(c, 6, 18, 78, 50)}<circle cx="15" cy="27" r="2.2" fill="#fff" fill-opacity=".6"/><circle cx="75" cy="27" r="2.2" fill="#fff" fill-opacity=".6"/>`;
+
+const concepts = [
+  { id:"K", round:3, shift:"translate(2 5.5)", name:"P Bill", note:"A straight bill with the P in the centre seal, and a small gold coin stack on the right that ends just below the bottom of the bill.",
+    draw: c => `${flatBill(c)}<circle cx="40" cy="43" r="14" fill="#fff"/>
+      <path d="M35.5 52V34h6a6 6 0 0 1 0 12h-6" ${S} stroke="#13203a" stroke-width="5"/>${stack(c, 74, 16, [58.5, 49.5, 40.5])}` },
+  { id:"L", round:3, name:"P on the Stack", note:"The P moves onto the coins: a gold P coin standing on top of the stack, in front of a straight bill. Closest to I.",
+    draw: c => `${flatBill(c)}<ellipse cx="38" cy="43" rx="10" ry="12" fill="#fff" fill-opacity=".45"/>${stack(c, 74, 16, [83, 74])}
+      <circle cx="74" cy="55" r="17" fill="${c.accent}" stroke="${c.bg}" stroke-width="3"/>
+      <circle cx="74" cy="55" r="12.5" fill="none" stroke="${c.accentInk}" stroke-opacity=".25" stroke-width="1.5"/>
+      <path d="M69.5 63V47h5.8a5.3 5.3 0 0 1 0 10.6h-5.8" ${S} stroke="${c.accentInk}" stroke-width="4.5"/>` },
+  { id:"M", round:3, name:"Ring Bill", note:"A and I together: the split ring from A with its P sits in the bill's seal, gold for saved and white for spent, with the coin stack on the corner.",
+    draw: c => `${flatBill(c)}<path d="${arc(40,43,13,0,100)}" ${S} stroke="${c.accent}" stroke-width="5"/>
+      <path d="${arc(40,43,13,128,332)}" ${S} stroke="#fff" stroke-width="5"/>
+      <path d="M36.5 49V37h4.3a4.4 4.4 0 0 1 0 8.8h-4.3" ${S} stroke="#fff" stroke-width="3.6"/>${stack(c, 74, 16, [82, 73, 64])}` },
+  { id:"N", round:3, name:"Big P Bill", note:"A large P printed across the left of the bill, with the coin stack on the right. The boldest of these four at small sizes.",
+    draw: c => `${flatBill(c)}<path d="M23 57V30h11a8.5 8.5 0 0 1 0 17H23" ${S} stroke="#fff" stroke-width="8"/>${stack(c, 74, 16, [82, 73, 64])}` },
+  { id:"G", round:2, name:"Bill & Coin", note:"A blue bill for spending money with a gold coin in front for what you save. Simple, and the $ makes it obvious it is about money.",
+    draw: c => `<g transform="rotate(-10 41 42)">${bill(c, 8, 22, 66, 40)}<circle cx="41" cy="42" r="8" fill="#fff" fill-opacity=".5"/></g>
+      <circle cx="66" cy="66" r="22" fill="${c.accent}" stroke="${c.bg}" stroke-width="4"/>
+      <circle cx="66" cy="66" r="16" fill="none" stroke="${c.accentInk}" stroke-opacity=".25" stroke-width="2"/>${dollar(c, 66, 75, 25)}` },
+  { id:"H", round:2, name:"Coin Stack", note:"A bill tucked behind a growing stack of gold coins. Reads as “saving up”, which is what the goals screen is about.",
+    draw: c => `<g transform="rotate(-12 36 35)">${bill(c, 6, 16, 60, 38)}<circle cx="36" cy="35" r="7" fill="#fff" fill-opacity=".5"/></g>
+      ${coinStack(c, [76, 64, 52])}` },
+  { id:"I", round:2, name:"P Coin", note:"A big gold coin stamped with a P, with a blue bill behind it. The coin works alone as the app icon and as a monogram.",
+    draw: c => `<g transform="rotate(-14 40 33)">${bill(c, 10, 14, 60, 38)}</g>
+      <circle cx="58" cy="60" r="30" fill="${c.accent}" stroke="${c.bg}" stroke-width="4"/>
+      <circle cx="58" cy="60" r="24" fill="none" stroke="${c.accentInk}" stroke-opacity=".25" stroke-width="2"/>
+      <path d="M50 74V46h9.5a8 8 0 0 1 0 16h-9.5" ${S} stroke="${c.accentInk}" stroke-width="7.5"/>` },
+  { id:"J", round:2, name:"Check Bill", note:"A dollar bill with a gold check where the portrait would be, and a coin on the corner. Mixes the bill and coin with the check from B.",
+    draw: c => `${bill(c, 6, 22, 80, 50)}<circle cx="46" cy="47" r="14" fill="${c.accent}"/>
+      <path d="M39.5 47.5l4.5 4.5 9-10" ${S} stroke="${c.accentInk}" stroke-width="4"/>
+      <circle cx="79" cy="73" r="16" fill="${c.accent}" stroke="${c.bg}" stroke-width="4"/>${dollar(c, 79, 80, 19)}` },
+  { id:"A", round:1, name:"Split Ring", note:"The payday ring itself: the gold slice is what you saved, the blue is what you can spend, with a P in the middle. Most tied to the app's main screen.",
+    draw: c => `<path d="${arc(50,50,34,0,100)}" ${S} stroke="${c.accent}" stroke-width="13"/>
+      <path d="${arc(50,50,34,124,336)}" ${S} stroke="${c.spend}" stroke-width="13"/>
+      <path d="M42 64V36h9a8 8 0 0 1 0 16h-9" ${S} stroke="${c.ink}" stroke-width="7.5"/>` },
+  { id:"B", round:1, name:"Check Ring", note:"A gold check breaking out of a blue ring. Says “paycheck” and “done” at once, and stays clear at small sizes.",
+    draw: c => `<path d="${arc(50,50,34,78,372)}" ${S} stroke="${c.spend}" stroke-width="11"/>
+      <path d="M32 51l14 14 34-42" ${S} stroke="${c.accent}" stroke-width="12"/>` },
+  { id:"C", round:1, name:"Ring P", note:"A P whose bowl is a progress ring, gold for saved and blue for spent. Works as a monogram on its own and in the wordmark.",
+    draw: c => `<g transform="translate(-2,-2)">
+      <path d="${arc(52,40,19,286,440)}" ${S} stroke="${c.accent}" stroke-width="14"/>
+      <path d="${arc(52,40,19,478,585)}" ${S} stroke="${c.spend}" stroke-width="14"/>
+      <rect x="26" y="18" width="14" height="68" rx="7" fill="${c.ink}"/></g>` },
+  { id:"D", round:1, name:"Tiles", note:"Four tiles like the app's grid. Blue for spending, quiet tiles for accounts, and a gold tile with a check for the money you kept.",
+    draw: c => `<rect x="10" y="10" width="38" height="38" rx="10" fill="${c.spend}"/>
+      <rect x="52" y="10" width="38" height="38" rx="10" fill="${c.soft}"/>
+      <rect x="10" y="52" width="38" height="38" rx="10" fill="${c.soft}"/>
+      <rect x="52" y="52" width="38" height="38" rx="10" fill="${c.accent}"/>
+      <path d="M61 71l7 7 13-15" ${S} stroke="${c.accentInk}" stroke-width="6"/>` },
+  { id:"E", round:1, name:"Dip & Rise", note:"A check that doubles as a chart: a small blue dip for spending, then a long gold climb with an arrow for savings growing.",
+    draw: c => `<path d="M18 54l19 19" ${S} stroke="${c.spend}" stroke-width="12"/>
+      <path d="M37 73l43-46M60 25h21v21" ${S} stroke="${c.accent}" stroke-width="12"/>` },
+  { id:"F", round:1, name:"Pay Stub", note:"A torn-off pay stub with blue spending lines and a gold stamp. The most literal of the six, friendly and easy to recognise.",
+    draw: c => `<path d="M28 13H72a6 6 0 0 1 6 6V83l-7-5-7 5-7-5-7 5-7-5-7 5-7-5-7 5V19a6 6 0 0 1 6-6Z" fill="${c.paper}" stroke="${c.ink}" stroke-width="4.5" stroke-linejoin="round"/>
+      <path d="M32 27h14M32 46h30M32 56h22M32 66h28" ${S} stroke="${c.spend}" stroke-width="5"/>
+      <path d="M32 27h14" ${S} stroke="${c.ink}" stroke-width="5"/>
+      <circle cx="64" cy="29" r="10" fill="${c.accent}"/>
+      <path d="M59.5 29.5l3.2 3.2 6-6.5" ${S} stroke="${c.accentInk}" stroke-width="3"/>` },
+];
+
+const body = (cn, c) => cn.round === 3 ? `<g transform="${cn.shift || "translate(2 -6.5)"}">${cn.draw(c)}</g>` : cn.draw(c);
+const mark = (cn, c, size, label) => `<svg viewBox="0 0 100 100" width="${size}" height="${size}" role="img" aria-label="${label}">${body(cn, c)}</svg>`;
+// App icon: squircle-ish rounded square, mark at ~66% scale.
+const icon = (cn, dark, size) => {
+  const bg = dark ? "#13203a" : "#ffffff", c = { ...(dark ? D : L), bg };
+  const stroke = dark ? "" : `stroke="#dfe5ef" stroke-width="1"`;
+  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" role="img" aria-label="${cn.name} app icon">
+    <rect x="0.5" y="0.5" width="99" height="99" rx="22.5" fill="${bg}" ${stroke}/>
+    <g transform="translate(15 15) scale(.7)">${body(cn, c)}</g></svg>`;
+};
+
+document.getElementById("shelf-d").innerHTML = concepts.map(cn => `<div class="app">${icon(cn, true, 58)}<span>${cn.id}</span></div>`).join("");
+document.getElementById("shelf-l").innerHTML = concepts.map(cn => `<div class="app">${icon(cn, false, 58)}<span>${cn.id}</span></div>`).join("");
+
+const groupHead = {3:`<h2 class="group">Straight bill, coins and a P</h2>`, 2:`<h2 class="group">Bills and coins</h2>`, 1:`<h2 class="group">First ideas</h2>`};
+let lastRound = 0;
+document.getElementById("concepts").innerHTML = concepts.map(cn => (cn.round !== lastRound ? groupHead[lastRound = cn.round] : "") + `
+  <section class="tile" id="concept-${cn.id}">
+    <div class="concept-head"><span class="letter">${cn.id}</span><h2>${cn.name}</h2><p>${cn.note}</p></div>
+    <div class="strip">
+      <div class="cell l"><span class="cap">Light</span><div class="big">${mark(cn, L, 132, cn.name + " on light")}</div>
+        <div class="lock">${mark(cn, L, 34, "")}<span>Pay<b>Check</b></span></div></div>
+      <div class="cell d"><span class="cap">Dark</span><div class="big">${mark(cn, D, 132, cn.name + " on dark")}</div>
+        <div class="lock">${mark(cn, D, 34, "")}<span>Pay<b>Check</b></span></div></div>
+      <div class="cell i"><span class="cap">App icon</span>
+        <div class="icons">
+          <figure>${icon(cn, true, 96)}<figcaption>Home</figcaption></figure>
+          <figure>${icon(cn, true, 48)}<figcaption>Settings</figcaption></figure>
+          <figure>${icon(cn, true, 30)}<figcaption>Alert</figcaption></figure>
+          <figure>${icon(cn, false, 48)}<figcaption>Light</figcaption></figure>
+        </div></div>
+    </div>
+  </section>`).join("");
+</script>
+
+</body></html>

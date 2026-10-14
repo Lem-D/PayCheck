@@ -1,0 +1,329 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>PayCheck Looks</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: a gallery page. Each option is a band with its name, swatches, a one-line note and a row of four phone mocks. */
+:root{
+  --bg:#f3f4f6; --fg:#16181d; --muted:#5d636e; --line:#d9dce2; --card:#ffffff; --accent:#3b4bd8;
+  --page-font:"Figtree",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#121419;--fg:#e8eaee;--muted:#9aa1ad;--line:#2b2f38;--card:#1b1e25;--accent:#8e9bff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121419;--fg:#e8eaee;--muted:#9aa1ad;--line:#2b2f38;--card:#1b1e25;--accent:#8e9bff;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--page-font);font-size:15px;line-height:1.5}
+.page{max-width:1180px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header h1{font-size:30px;margin:0 0 6px;text-wrap:balance;letter-spacing:-.01em}
+header p{margin:0;color:var(--muted);max-width:68ch}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.jump a{color:var(--fg);text-decoration:none;border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:999px;font-size:14px;font-weight:500}
+.jump a:hover,.jump a:focus-visible{border-color:var(--accent);outline:none}
+section.opt{margin-top:40px;padding-top:28px;border-top:1px solid var(--line)}
+.opthead{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px;justify-content:space-between}
+.opthead h2{margin:0;font-size:22px;letter-spacing:-.01em}
+.opthead .tag{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.note{margin:6px 0 0;max-width:70ch}
+.meta{color:var(--muted);font-size:14px;margin-top:4px}
+.sw{display:flex;gap:6px}
+.sw span{width:26px;height:26px;border-radius:50%;border:1px solid var(--line)}
+.row{display:flex;gap:20px;overflow-x:auto;padding:18px 2px 10px;scroll-snap-type:x mandatory}
+.shot{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px;align-items:center}
+.shot figcaption{font-size:13px;color:var(--muted);font-weight:500}
+
+/* Phone frame */
+.phone{width:252px;height:530px;border-radius:34px;padding:8px;background:#0b0c0f;box-shadow:0 1px 2px rgba(0,0,0,.2),0 10px 30px rgba(10,15,30,.14)}
+.scr{position:relative;width:100%;height:100%;border-radius:27px;overflow:hidden;background:var(--p-bg);color:var(--p-ink);font-family:var(--p-font);font-size:12px;line-height:1.35;display:flex;flex-direction:column}
+.sb{display:flex;justify-content:space-between;padding:9px 18px 4px;font-size:10.5px;font-weight:600;color:var(--p-ink);flex:0 0 auto}
+.body{flex:1 1 auto;overflow:hidden;padding:4px 14px 10px;display:flex;flex-direction:column;gap:9px}
+.num{font-family:var(--p-num);font-variant-numeric:tabular-nums}
+.mu{color:var(--p-muted)}
+.lbl{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--p-muted);font-weight:600}
+.r{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.bar{height:6px;border-radius:9px;background:var(--p-track);overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.tabs{flex:0 0 auto;display:flex;justify-content:space-around;padding:8px 6px 14px;border-top:1px solid var(--p-line);background:var(--p-surface)}
+.tabs b{font-size:10px;font-weight:600;color:var(--p-muted);display:flex;flex-direction:column;align-items:center;gap:3px}
+.tabs b::before{content:"";width:18px;height:18px;border-radius:6px;background:var(--p-track)}
+.tabs b.on{color:var(--p-accent)}
+.tabs b.on::before{background:var(--p-accent)}
+.ttl{font-size:17px;font-weight:700;margin:2px 0 0}
+
+/* Current */
+.cur{--p-bg:#eef2f0;--p-surface:#fff;--p-ink:#14211c;--p-muted:#5b6b65;--p-line:#d5ddd9;--p-accent:#1d6b57;--p-accent-ink:#fff;--p-soft:#dcebe5;--p-spend:#3d5a80;--p-bad:#a9442c;--p-warn:#8a5a00;--p-track:#d5ddd9;--p-font:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;--p-num:ui-monospace,Menlo,monospace}
+.cur .card{background:var(--p-surface);border:1px solid var(--p-line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:5px}
+.cur .li+.li{border-top:1px solid var(--p-line);padding-top:5px}
+.cur .big{font-size:26px;font-weight:600;border-bottom:1px solid var(--p-line);padding-bottom:3px}
+.cur .btn{background:var(--p-accent);color:var(--p-accent-ink);text-align:center;border-radius:8px;padding:8px;font-weight:600}
+
+/* Harbour */
+.har{--p-bg:#0e1626;--p-surface:#152036;--p-ink:#eef2f8;--p-muted:#8e9ab0;--p-line:#24314b;--p-accent:#f2bf4b;--p-accent-ink:#1b1405;--p-spend:#6fb6ff;--p-bad:#ff7a6b;--p-warn:#f2bf4b;--p-good:#5fd3a5;--p-track:#24314b;--p-font:"Outfit",system-ui,sans-serif;--p-num:"Outfit",system-ui,sans-serif}
+.har .tile{background:var(--p-surface);border-radius:16px;padding:10px}
+.har .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.har .ringwrap{position:relative;display:grid;place-items:center;margin:2px auto 0}
+.har .ringwrap .c{position:absolute;text-align:center}
+.har .pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600}
+.har .tabs{border:0;margin:0 12px 12px;border-radius:18px;padding:8px 6px}
+.har .btn{background:var(--p-accent);color:var(--p-accent-ink);text-align:center;border-radius:14px;padding:9px;font-weight:700}
+
+/* Envelopes */
+.env{--p-bg:#f7f3fb;--p-surface:#ffffff;--p-ink:#2a1f38;--p-muted:#76698a;--p-line:#e6dcf0;--p-accent:#6b3fa0;--p-accent-ink:#fff;--p-peach:#ffb48a;--p-spend:#6b3fa0;--p-bad:#d6455d;--p-warn:#d98a1c;--p-good:#2f9a6e;--p-track:#ece4f4;--p-font:"Nunito",system-ui,sans-serif;--p-num:"Nunito",system-ui,sans-serif}
+.env .envs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.env .e{position:relative;background:var(--p-surface);border-radius:12px;padding:16px 9px 8px;box-shadow:0 1px 0 var(--p-line),0 3px 8px rgba(70,30,110,.06);overflow:hidden}
+.env .e::before{content:"";position:absolute;left:0;right:0;top:0;height:22px;background:linear-gradient(to bottom right,transparent 49.5%,var(--p-line) 50%) left/50% 100% no-repeat,linear-gradient(to bottom left,transparent 49.5%,var(--p-line) 50%) right/50% 100% no-repeat;opacity:.9}
+.env .e .fill{position:absolute;left:0;bottom:0;right:0;background:var(--p-track);z-index:0}
+.env .e>*{position:relative;z-index:1}
+.env .jar{display:flex;gap:10px;align-items:center;background:var(--p-surface);border-radius:14px;padding:9px}
+.env .jarv{width:34px;height:44px;border-radius:8px 8px 10px 10px;border:2px solid var(--p-accent);position:relative;overflow:hidden;flex:0 0 auto}
+.env .jarv i{position:absolute;left:0;right:0;bottom:0;background:var(--p-peach)}
+.env .hero{background:var(--p-accent);color:#fff;border-radius:16px;padding:12px}
+.env .hero .mu{color:#dccdf0}
+.env .btn{background:var(--p-ink);color:#fff;text-align:center;border-radius:99px;padding:9px;font-weight:800}
+.env .tabs b::before{border-radius:50%}
+
+/* Receipt */
+.rec{--p-bg:#fbfaf6;--p-surface:#fbfaf6;--p-ink:#141414;--p-muted:#6c6a63;--p-line:#cfccc2;--p-accent:#141414;--p-hl:#ffe14d;--p-bad:#d2311b;--p-warn:#b37400;--p-track:#e6e3d9;--p-font:"IBM Plex Sans",system-ui,sans-serif;--p-num:"IBM Plex Mono",ui-monospace,monospace}
+.rec .top{display:flex;gap:14px;padding:2px 14px 6px;border-bottom:1.5px solid var(--p-ink);font-weight:600;font-size:12px;flex:0 0 auto}
+.rec .top span{color:var(--p-muted);padding-bottom:5px}
+.rec .top span.on{color:var(--p-ink);box-shadow:inset 0 -3px 0 var(--p-hl)}
+.rec .ln{display:flex;align-items:baseline;gap:4px}
+.rec .ln .dots{flex:1;border-bottom:1.5px dotted var(--p-line);transform:translateY(-3px)}
+.rec .hr{border-top:1.5px dashed var(--p-line)}
+.rec .hl{background:var(--p-hl);padding:0 3px}
+.rec .h{font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.rec .big{font-family:var(--p-num);font-size:30px;font-weight:600;letter-spacing:-.02em}
+.rec .btn{border:1.5px solid var(--p-ink);text-align:center;padding:8px;font-weight:600;background:var(--p-hl)}
+.rec .blocks{font-family:var(--p-num);letter-spacing:-1px;font-size:11px}
+
+/* Sunrise */
+.sun{--p-bg:#ffffff;--p-surface:#f3f5fb;--p-ink:#101634;--p-muted:#5f6787;--p-line:#e3e7f3;--p-accent:#2453ff;--p-accent-ink:#fff;--p-coral:#ff6b4a;--p-spend:#2453ff;--p-bad:#e23c3c;--p-warn:#e08a00;--p-good:#14a06f;--p-track:#e3e7f3;--p-font:"Plus Jakarta Sans",system-ui,sans-serif;--p-num:"Plus Jakarta Sans",system-ui,sans-serif}
+.sun .head{background:linear-gradient(150deg,#2453ff 0%,#5b3dff 55%,#ff6b4a 130%);color:#fff;padding:6px 16px 16px;margin:0 0 2px;flex:0 0 auto}
+.sun .head .sb{color:#fff;padding-left:2px;padding-right:2px}
+.sun .head .mu{color:#d8deff}
+.sun .step{display:grid;grid-template-columns:18px 1fr;gap:8px;position:relative}
+.sun .dot{width:18px;height:18px;border-radius:50%;background:var(--p-accent);color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center}
+.sun .step:not(:last-child)::after{content:"";position:absolute;left:8.5px;top:20px;bottom:-8px;width:1px;background:var(--p-line)}
+.sun .chip{display:inline-block;background:var(--p-surface);border-radius:99px;padding:2px 8px;font-size:10px;font-weight:600}
+.sun .carousel{display:flex;gap:8px;margin-right:-14px}
+.sun .gc{flex:0 0 150px;border-radius:16px;padding:10px;color:#fff}
+.sun .bank{border-radius:14px;padding:10px 12px;color:#fff;display:flex;flex-direction:column;gap:10px}
+.sun .btn{background:var(--p-coral);color:#fff;text-align:center;border-radius:12px;padding:9px;font-weight:700}
+.sun .tabs{background:#fff}
+
+@media (prefers-reduced-motion:no-preference){.row{scroll-behavior:smooth}}
+</style>
+
+<div class="page">
+  <header>
+    <h1>PayCheck looks</h1>
+    <p>The app you have now was built with one default look; no other colour themes or layouts were tried. So here are four real alternatives, each shown on the same four screens with the same example numbers: Payday, Goals, Accounts, and the spending limits screen from step 3. The current look is at the top for comparison.</p>
+    <nav class="jump" aria-label="Options">
+      <a href="#current">Current</a><a href="#harbour">A · Harbour</a><a href="#envelopes">B · Envelopes</a><a href="#receipt">C · Receipt</a><a href="#sunrise">D · Sunrise</a>
+    </nav>
+  </header>
+  <main id="opts"></main>
+  <p class="meta" style="margin-top:36px">All figures are made-up examples. Each option would also get a matching dark version (Harbour is dark by design and would get a light one). Swipe sideways on a row to see all four screens on a phone.</p>
+</div>
+
+<script>
+const $ = n => "$" + Math.abs(n).toLocaleString("en-CA",{minimumFractionDigits: n%1?2:0, maximumFractionDigits:2});
+const D = {
+  pay:2150, spend:1500, save:650,
+  cats:[{n:"Rent",l:900,s:900,bill:1},{n:"Groceries",l:250,s:188},{n:"Transit",l:120,s:60},{n:"Eating out",l:100,s:104},{n:"Fun money",l:75,s:30},{n:"Phone",l:55,s:0,bill:1}],
+  goals:[{n:"Emergency fund",t:5000,v:3100,get:400,by:"Mar 2027",acct:"EQ Savings",left:11},{n:"Japan trip",t:4000,v:1350,get:250,by:"Jun 2027",acct:"TFSA",left:17}],
+  accts:[{n:"Chequing",k:"Chequing",b:1240},{n:"EQ Savings",k:"Savings",b:3100},{n:"TFSA",k:"TFSA",b:7800}],
+  debts:[{n:"Visa",k:"Credit card",b:1420,rate:"20.99%"},{n:"Car loan",k:"Car loan",b:8900,rate:"6.4%"}],
+  moves:[{n:"EQ Savings",a:400},{n:"TFSA",a:250}]
+};
+const have = D.accts.reduce((s,a)=>s+a.b,0), owe = D.debts.reduce((s,a)=>s+a.b,0), net = have-owe;
+const spentAll = D.cats.reduce((s,c)=>s+c.s,0), limAll = D.cats.reduce((s,c)=>s+c.l,0);
+const pct = (a,b)=>Math.min(100,Math.round(a/b*100));
+const state = c => c.bill && c.s>=c.l ? "paid" : c.s>=c.l ? "over" : c.s/c.l>=.75 ? "warn" : "ok";
+const stColor = c => ({paid:"var(--p-muted)",over:"var(--p-bad)",warn:"var(--p-warn)",ok:"var(--p-spend)"})[state(c)];
+const sb = () => `<div class="sb"><span>9:41</span><span>●●● ▮</span></div>`;
+const tabs = (on, names=["Payday","Spending","Goals","Accounts"]) => `<div class="tabs">${names.map(n=>`<b class="${n===on?"on":""}">${n}</b>`).join("")}</div>`;
+const ring = (p, size, sw, col, track="var(--p-track)") => { const r=(size-sw)/2, C=2*Math.PI*r; return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true"><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${track}" stroke-width="${sw}"/><circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round" stroke-dasharray="${C*p/100} ${C}" transform="rotate(-90 ${size/2} ${size/2})"/></svg>`; };
+
+/* ---------- Current (stacked cards) ---------- */
+const CUR = {
+  Payday:()=>`${sb()}<div class="body">
+    <div><div class="lbl">I got paid</div><div class="big num">$2,150.00</div></div>
+    <div class="card"><div class="r"><span>Keep for spending</span><b class="num">${$(D.spend)}</b></div><div class="r"><span>Move to savings</span><b class="num" style="color:var(--p-accent)">${$(D.save)}</b></div>
+      <div class="bar"><i style="width:70%;background:var(--p-spend)"></i><i style="width:30%;background:var(--p-accent)"></i></div></div>
+    <div class="card" style="background:var(--p-soft);border-color:transparent;color:var(--p-accent)">You're saving 30% of this paycheque.</div>
+    <div class="lbl">Transfers to make</div>
+    <div class="card">${D.moves.map(m=>`<div class="r li"><span>To ${m.n}</span><b class="num">${$(m.a)}</b></div>`).join("")}</div>
+    <div class="lbl">Toward your goals</div>
+    <div class="card">${D.goals.map(g=>`<div class="li"><div class="r"><span>${g.n}</span><b class="num">${$(g.get)}</b></div><span class="mu" style="font-size:10.5px">${$(g.t-g.v)} to go · by ${g.by}</span></div>`).join("")}</div>
+  </div>${tabs("Payday")}`,
+  Spending:()=>`${sb()}<div class="body"><div class="ttl">Spending</div><div class="mu">Oct 10 – Oct 23 · 9 days left</div>
+    ${D.cats.map(c=>`<div class="card"><div class="r"><span>${c.n}</span><b class="num" style="color:${stColor(c)}">${state(c)==="paid"?"Paid":(c.s>c.l?"−":"")+$(c.l-c.s)+" left"}</b></div><div class="bar"><i style="width:${pct(c.s,c.l)}%;background:${stColor(c)}"></i></div></div>`).join("")}
+  </div>${tabs("Spending")}`,
+  Goals:()=>`${sb()}<div class="body"><div class="ttl">Goals</div>
+    ${D.goals.map(g=>`<div class="card"><div class="r"><b>${g.n}</b><span class="num mu">${$(g.v)} / ${$(g.t)}</span></div><div class="bar"><i style="width:${pct(g.v,g.t)}%;background:var(--p-accent)"></i></div><span class="mu" style="font-size:10.5px">${$(g.get)} each paycheque · by ${g.by}</span></div>`).join("")}
+    <div class="lbl">Spending limits · every 2 weeks</div>
+    <div class="card">${D.cats.slice(0,5).map(c=>`<div class="r li"><span>${c.n}</span><span class="num">${$(c.l)}</span></div>`).join("")}</div>
+  </div>${tabs("Goals")}`,
+  Accounts:()=>`${sb()}<div class="body"><div class="ttl">Accounts</div>
+    <div class="card"><div class="lbl">Net worth</div><div class="num" style="font-size:22px;font-weight:600">${$(net)}</div><div class="bar"><i style="width:${have/(have+owe)*100}%;background:var(--p-accent)"></i><i style="flex:1;background:var(--p-bad)"></i></div></div>
+    <div class="lbl">What I have</div><div class="card">${D.accts.map(a=>`<div class="r li"><span>${a.n}</span><b class="num">${$(a.b)}</b></div>`).join("")}</div>
+    <div class="lbl">What I owe</div><div class="card">${D.debts.map(a=>`<div class="r li"><span>${a.n}</span><b class="num" style="color:var(--p-bad)">${$(a.b)}</b></div>`).join("")}</div>
+  </div>${tabs("Accounts")}`
+};
+
+/* ---------- A: Harbour (dark, rings and tiles) ---------- */
+const HAR = {
+  Payday:()=>`${sb()}<div class="body">
+    <div class="r"><span class="ttl" style="font-size:15px">Payday</span><span class="pill" style="background:#24314b;color:var(--p-muted)">Fri Oct 10</span></div>
+    <div class="ringwrap">${ring(30,150,14,"var(--p-accent)","var(--p-spend)")}<div class="c"><div class="mu" style="font-size:10px">I got paid</div><div class="num" style="font-size:24px;font-weight:600">$2,150</div><div style="color:var(--p-accent);font-weight:600;font-size:11px">30% saved</div></div></div>
+    <div class="grid"><div class="tile"><div class="mu" style="font-size:10px">Spend</div><div class="num" style="font-size:17px;font-weight:600;color:var(--p-spend)">${$(D.spend)}</div></div><div class="tile"><div class="mu" style="font-size:10px">Save</div><div class="num" style="font-size:17px;font-weight:600;color:var(--p-accent)">${$(D.save)}</div></div></div>
+    <div class="tile" style="display:flex;flex-direction:column;gap:6px"><div class="mu" style="font-size:10px">Move now</div>${D.moves.map(m=>`<div class="r"><span>→ ${m.n}</span><b class="num">${$(m.a)}</b></div>`).join("")}</div>
+    <div class="btn">I moved the money</div>
+  </div>${tabs("Payday")}`,
+  Spending:()=>`${sb()}<div class="body">
+    <div class="r"><span class="ttl" style="font-size:15px">This pay period</span><span class="pill" style="background:#24314b;color:var(--p-muted)">9 days left</span></div>
+    <div class="tile r" style="align-items:center"><div><div class="mu" style="font-size:10px">Left to spend</div><div class="num" style="font-size:22px;font-weight:600">${$(limAll-spentAll+4)}</div></div>${ring(pct(spentAll,limAll),46,6,"var(--p-spend)")}</div>
+    <div class="grid">${D.cats.map(c=>`<div class="tile" style="display:flex;flex-direction:column;gap:5px"><span class="mu" style="font-size:10.5px">${c.n}</span><b class="num" style="font-size:14px;color:${stColor(c)}">${state(c)==="paid"?"Paid":state(c)==="over"?"−"+$(c.s-c.l):$(c.l-c.s)}</b><div class="bar" style="height:4px"><i style="width:${pct(c.s,c.l)}%;background:${stColor(c)}"></i></div></div>`).join("")}</div>
+  </div>${tabs("Spending")}`,
+  Goals:()=>`${sb()}<div class="body"><span class="ttl" style="font-size:15px">Goals</span>
+    ${D.goals.map(g=>`<div class="tile" style="display:flex;gap:10px;align-items:center"><div class="ringwrap" style="margin:0">${ring(pct(g.v,g.t),58,7,"var(--p-good)")}<div class="c num" style="font-size:12px;font-weight:600">${pct(g.v,g.t)}%</div></div><div style="flex:1"><b style="font-size:13px">${g.n}</b><div class="mu num" style="font-size:10.5px">${$(g.v)} of ${$(g.t)}</div><div style="font-size:10.5px;margin-top:3px"><span style="color:var(--p-accent);font-weight:600">${$(g.get)}</span><span class="mu"> per pay · ${g.by}</span></div></div></div>`).join("")}
+    <div class="tile"><div class="mu" style="font-size:10px">Anything left over</div><div style="font-weight:600;margin-top:2px">→ Japan trip</div></div>
+    <div class="tile" style="border:1px dashed var(--p-line);background:transparent;text-align:center;color:var(--p-muted)">+ New goal</div>
+  </div>${tabs("Goals")}`,
+  Accounts:()=>`${sb()}<div class="body"><span class="ttl" style="font-size:15px">Accounts</span>
+    <div class="tile"><div class="mu" style="font-size:10px">Net worth</div><div class="num" style="font-size:26px;font-weight:600;color:var(--p-good)">${$(net)}</div><div class="bar" style="margin-top:6px"><i style="width:${have/(have+owe)*100}%;background:var(--p-good)"></i><i style="flex:1;background:var(--p-bad)"></i></div><div class="r mu" style="font-size:10px;margin-top:4px"><span>Have ${$(have)}</span><span>Owe ${$(owe)}</span></div></div>
+    <div class="grid">${D.accts.map(a=>`<div class="tile"><div class="mu" style="font-size:10px">${a.k}</div><b>${a.n}</b><div class="num" style="font-size:14px;font-weight:600">${$(a.b)}</div></div>`).join("")}${D.debts.map(a=>`<div class="tile" style="box-shadow:inset 0 0 0 1px #4a2a33"><div class="mu" style="font-size:10px">${a.k} · ${a.rate}</div><b>${a.n}</b><div class="num" style="font-size:14px;font-weight:600;color:var(--p-bad)">${$(a.b)}</div></div>`).join("")}</div>
+  </div>${tabs("Accounts")}`
+};
+
+/* ---------- B: Envelopes (light, cash-stuffing) ---------- */
+const envCard = (c, small) => { const left=c.l-c.s, st=state(c); return `<div class="e"><div class="fill" style="height:${100-pct(c.s,c.l)}%;background:${st==="over"?"#fbe0e5":st==="warn"?"#fdebd3":"#efe6f8"}"></div><div style="font-weight:700;font-size:11.5px">${c.n}</div><div class="num" style="font-weight:800;font-size:15px;color:${st==="over"?"var(--p-bad)":st==="warn"?"var(--p-warn)":st==="paid"?"var(--p-muted)":"var(--p-ink)"}">${st==="paid"?"Paid":(left<0?"−":"")+$(left)}</div><div class="mu" style="font-size:10px">${small?"of "+$(c.l):st==="over"?"over by "+$(-left):"left of "+$(c.l)}</div></div>`; };
+const ENV = {
+  Payday:()=>`${sb()}<div class="body">
+    <div class="hero"><div class="mu" style="font-size:10.5px;font-weight:700">I got paid</div><div class="num" style="font-size:26px;font-weight:800">$2,150.00</div><div style="font-size:11px;margin-top:2px">Here's how to fill your envelopes</div></div>
+    <div class="lbl">Spending envelopes · ${$(D.spend)}</div>
+    <div class="envs">${D.cats.slice(0,4).map(c=>`<div class="e"><div style="font-weight:700;font-size:11.5px">${c.n}</div><div class="num" style="font-weight:800;font-size:15px">+${$(c.l)}</div></div>`).join("")}</div>
+    <div class="lbl">Savings jars · ${$(D.save)}</div>
+    ${D.goals.map(g=>`<div class="jar"><div class="jarv"><i style="height:${pct(g.v,g.t)}%"></i></div><div style="flex:1"><b>${g.n}</b><div class="mu" style="font-size:10px">into ${g.acct}</div></div><b class="num" style="color:var(--p-accent);font-size:14px">+${$(g.get)}</b></div>`).join("")}
+  </div>${tabs("Payday")}`,
+  Spending:()=>`${sb()}<div class="body">
+    <div class="r"><span class="ttl">Envelopes</span><span class="mu" style="font-weight:700">9 days left</span></div>
+    <div class="r" style="background:var(--p-surface);border-radius:12px;padding:8px 10px;align-items:center"><span style="font-weight:700">+ Add a purchase</span><span style="background:var(--p-accent);color:#fff;border-radius:99px;width:22px;height:22px;display:grid;place-items:center;font-weight:800">+</span></div>
+    <div class="envs">${D.cats.map(c=>envCard(c)).join("")}</div>
+  </div>${tabs("Spending")}`,
+  Goals:()=>`${sb()}<div class="body"><span class="ttl">Savings jars</span>
+    ${D.goals.map(g=>`<div class="jar" style="padding:11px"><div class="jarv" style="width:42px;height:56px"><i style="height:${pct(g.v,g.t)}%"></i></div><div style="flex:1;display:flex;flex-direction:column;gap:2px"><b style="font-size:13px">${g.n}</b><span class="num" style="font-weight:700">${$(g.v)} <span class="mu" style="font-weight:600">of ${$(g.t)}</span></span><span class="mu" style="font-size:10.5px">${$(g.get)} each payday · by ${g.by}</span></div></div>`).join("")}
+    <div class="lbl">Envelope sizes · every 2 weeks</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">${D.cats.map(c=>`<span style="background:var(--p-surface);border-radius:99px;padding:4px 9px;font-weight:700;font-size:11px">${c.n} <span class="num" style="color:var(--p-accent)">${$(c.l)}</span></span>`).join("")}</div>
+    <div class="btn">+ New jar</div>
+  </div>${tabs("Goals")}`,
+  Accounts:()=>`${sb()}<div class="body"><span class="ttl">Accounts</span>
+    <div class="hero" style="background:var(--p-ink)"><div class="mu" style="font-size:10.5px;font-weight:700">Net worth</div><div class="num" style="font-size:24px;font-weight:800">${$(net)}</div><div class="bar" style="margin-top:6px;background:#4a3d5c"><i style="width:${have/(have+owe)*100}%;background:var(--p-peach)"></i></div></div>
+    <div class="lbl">What I have</div>
+    ${D.accts.map(a=>`<div class="r" style="background:var(--p-surface);border-radius:12px;padding:8px 10px"><span><b>${a.n}</b><br><span class="mu" style="font-size:10px">${a.k}</span></span><b class="num" style="font-size:13px">${$(a.b)}</b></div>`).join("")}
+    <div class="lbl">What I owe</div>
+    ${D.debts.map(a=>`<div class="r" style="background:var(--p-surface);border-radius:12px;padding:8px 10px"><span><b>${a.n}</b><br><span class="mu" style="font-size:10px">${a.k} · ${a.rate}</span></span><b class="num" style="font-size:13px;color:var(--p-bad)">${$(a.b)}</b></div>`).join("")}
+  </div>${tabs("Accounts")}`
+};
+
+/* ---------- C: Receipt (paper, mono, top tabs) ---------- */
+const recTop = on => `<div class="top">${["Payday","Spending","Goals","Accounts"].map(n=>`<span class="${n===on?"on":""}">${n}</span>`).join("")}</div>`;
+const ln = (a,b,style="") => `<div class="ln"><span>${a}</span><span class="dots"></span><span class="num" style="${style}">${b}</span></div>`;
+const blocks = (p,n=12) => { const f=Math.round(p/100*n); return "█".repeat(f)+"░".repeat(n-f); };
+const REC = {
+  Payday:()=>`${sb()}${recTop("Payday")}<div class="body">
+    <div><div class="mu" style="font-size:10.5px">PAYDAY · FRI OCT 10</div><div class="big">$2,150.00</div></div>
+    <div class="h">Bills &amp; spending</div>
+    ${D.cats.map(c=>ln(c.n,$(c.l).padStart(5," "))).join("")}
+    <div class="hr"></div>
+    <div class="h">Savings</div>
+    ${D.goals.map(g=>ln(g.n+" → "+g.acct,$(g.get))).join("")}
+    <div class="hr"></div>
+    ${ln("<b>You save</b>",`<b class="hl">${$(D.save)} · 30%</b>`)}
+    <div class="btn">I moved the money</div>
+  </div>`,
+  Spending:()=>`${sb()}${recTop("Spending")}<div class="body">
+    <div class="r"><span class="h">Oct 10 – 23</span><span class="mu">9 days left</span></div>
+    ${D.cats.map(c=>{const s=state(c);return `<div><div class="r"><span style="font-weight:600">${c.n}</span><span class="num" style="${s==="over"?"color:var(--p-bad);font-weight:600":s==="warn"?"color:var(--p-warn);font-weight:600":""}">${s==="paid"?"PAID":(c.s>c.l?"OVER ":"")+$(Math.abs(c.l-c.s))+(c.s>c.l?"":" left")}</span></div><div class="blocks mu" style="${s==="over"?"color:var(--p-bad)":s==="warn"?"color:var(--p-warn)":""}">${blocks(pct(c.s,c.l),20)}</div></div>`}).join("")}
+    <div class="hr"></div>
+    <div class="btn" style="background:transparent">+ Log a purchase</div>
+  </div>`,
+  Goals:()=>`${sb()}${recTop("Goals")}<div class="body">
+    <div class="h">Savings goals</div>
+    ${D.goals.map(g=>`<div style="display:flex;flex-direction:column;gap:2px"><div class="r"><b>${g.n}</b><span class="num">${pct(g.v,g.t)}%</span></div><div class="blocks">${blocks(pct(g.v,g.t),20)}</div><span class="mu num" style="font-size:10.5px">${$(g.v)} / ${$(g.t)} · ${$(g.get)}/pay · ${g.by}</span></div>`).join("")}
+    <div class="hr"></div>
+    <div class="r"><span class="h">Limits</span><span class="mu">every 2 weeks</span></div>
+    ${D.cats.map(c=>ln(c.n,$(c.l))).join("")}
+    ${ln("Left over goes to","<span class='hl'>Japan trip</span>")}
+  </div>`,
+  Accounts:()=>`${sb()}${recTop("Accounts")}<div class="body">
+    <div><div class="mu" style="font-size:10.5px">NET WORTH</div><div class="big">${$(net)}.00</div></div>
+    <div class="h">Have</div>
+    ${D.accts.map(a=>ln(a.n,$(a.b))).join("")}
+    ${ln("<b>Total</b>","<b>"+$(have)+"</b>")}
+    <div class="hr"></div>
+    <div class="h">Owe</div>
+    ${D.debts.map(a=>ln(a.n+` <span class="mu">${a.rate}</span>`,"−"+$(a.b),"color:var(--p-bad)")).join("")}
+    ${ln("<b>Total</b>","<b>−"+$(owe)+"</b>","color:var(--p-bad)")}
+    <div class="hr"></div>
+    <div class="mu" style="font-size:10.5px">Tap a line to edit it.</div>
+  </div>`
+};
+
+/* ---------- D: Sunrise (bright, header card, steps) ---------- */
+const sunHead = (inner) => `<div class="head">${sb()}${inner}</div>`;
+const SUN = {
+  Payday:()=>`${sunHead(`<div class="mu" style="font-size:10.5px;font-weight:600;margin-top:4px">I got paid</div><div class="num" style="font-size:28px;font-weight:800;letter-spacing:-.02em">$2,150.00</div><div style="display:flex;gap:6px;margin-top:6px"><span class="chip" style="background:rgba(255,255,255,.18);color:#fff">Spend ${$(D.spend)}</span><span class="chip" style="background:#fff;color:var(--p-accent)">Save ${$(D.save)}</span></div>`)}<div class="body">
+    <div class="lbl">Your 3 steps</div>
+    <div class="step"><span class="dot">1</span><div><b>Keep ${$(D.spend)} in chequing</b><div class="mu" style="font-size:10.5px">Covers your 6 spending limits</div></div></div>
+    <div class="step"><span class="dot">2</span><div><b>Move $400 to EQ Savings</b><div class="mu" style="font-size:10.5px">Emergency fund · ${$(1900)} to go</div></div></div>
+    <div class="step"><span class="dot">3</span><div><b>Move $250 to TFSA</b><div class="mu" style="font-size:10.5px">Japan trip · ${$(2650)} to go</div></div></div>
+    <div style="background:#e8f7f0;color:var(--p-good);border-radius:12px;padding:8px 10px;font-weight:600">You're saving 30% this payday.</div>
+    <div class="btn">I moved the money</div>
+  </div>${tabs("Payday")}`,
+  Spending:()=>`${sunHead(`<div class="mu" style="font-size:10.5px;font-weight:600;margin-top:4px">Left to spend · 9 days</div><div class="num" style="font-size:28px;font-weight:800">${$(limAll-spentAll+4)}</div><div class="bar" style="background:rgba(255,255,255,.25);margin-top:6px"><i style="width:${pct(spentAll,limAll)}%;background:#fff"></i></div>`)}<div class="body">
+    ${D.cats.map(c=>{const s=state(c);const bg={paid:"var(--p-surface)",over:"#fde8e8",warn:"#fff2dc",ok:"#e9eeff"}[s];const fg={paid:"var(--p-muted)",over:"var(--p-bad)",warn:"var(--p-warn)",ok:"var(--p-accent)"}[s];return `<div class="r" style="align-items:center"><span style="font-weight:600">${c.n}</span><span class="chip num" style="background:${bg};color:${fg}">${s==="paid"?"Paid":s==="over"?$(c.s-c.l)+" over":$(c.l-c.s)+" left"}</span></div>`}).join("")}
+    <div class="btn" style="background:var(--p-accent)">+ Add a purchase</div>
+  </div>${tabs("Spending")}`,
+  Goals:()=>`${sb()}<div class="body"><span class="ttl">Goals</span>
+    <div class="carousel">${D.goals.map((g,i)=>`<div class="gc" style="background:${i?"linear-gradient(150deg,#ff6b4a,#ff9a5a)":"linear-gradient(150deg,#2453ff,#5b3dff)"}"><div style="font-weight:700">${g.n}</div><div class="num" style="font-size:20px;font-weight:800;margin-top:6px">${pct(g.v,g.t)}%</div><div class="bar" style="background:rgba(255,255,255,.3);margin:4px 0"><i style="width:${pct(g.v,g.t)}%;background:#fff"></i></div><div style="font-size:10px;opacity:.9">${$(g.get)} a payday · ${g.by}</div></div>`).join("")}</div>
+    <div class="r"><span class="lbl">Spending limits</span><span class="chip">Every 2 weeks</span></div>
+    ${D.cats.map(c=>`<div class="r" style="border-bottom:1px solid var(--p-line);padding-bottom:4px"><span>${c.n}</span><b class="num">${$(c.l)}</b></div>`).join("")}
+  </div>${tabs("Goals")}`,
+  Accounts:()=>`${sb()}<div class="body"><span class="ttl">Accounts</span>
+    <div class="r" style="background:var(--p-surface);border-radius:14px;padding:10px 12px;align-items:center"><div><div class="mu" style="font-size:10px;font-weight:600">Net worth</div><div class="num" style="font-size:22px;font-weight:800">${$(net)}</div></div><span class="chip" style="background:#e8f7f0;color:var(--p-good)">▲ $310 this month</span></div>
+    <div style="display:flex;flex-direction:column">
+    ${D.accts.map((a,i)=>`<div class="bank" style="background:${["#101634","#2453ff","#5b3dff"][i]};margin-top:${i?-14:0}px;box-shadow:0 -2px 6px rgba(16,22,52,.18)"><div class="r"><b>${a.n}</b><span style="font-size:10px;opacity:.8">${a.k}</span></div><div class="num" style="font-size:16px;font-weight:700;text-align:right">${$(a.b)}</div></div>`).join("")}</div>
+    <div class="lbl">What I owe</div>
+    ${D.debts.map(a=>`<div class="r"><span><b>${a.n}</b> <span class="mu" style="font-size:10px">${a.rate}</span></span><b class="num" style="color:var(--p-bad)">${$(a.b)}</b></div>`).join("")}
+  </div>${tabs("Accounts")}`
+};
+
+const OPTS = [
+  {id:"current",tag:"What you have now",name:"Current · Evergreen cards",cls:"cur",L:CUR,sw:["#eef2f0","#1d6b57","#3d5a80","#a9442c"],
+   note:"Pale green-grey background, one dark green accent, and every section in a plain white card stacked down the page. Clear, but every screen looks the same and nothing stands out.",
+   meta:"Bottom tabs · system font · stacked white cards"},
+  {id:"harbour",tag:"Option A",name:"Harbour · rings and tiles",cls:"har",L:HAR,sw:["#0e1626","#152036","#f2bf4b","#6fb6ff","#5fd3a5"],
+   note:"Dark navy with a warm gold for savings and sky blue for spending. Payday leads with one big ring showing your spend/save split, and categories sit in a two-column tile grid so you can see everything at a glance.",
+   meta:"Floating tab bar · Outfit · dashboard feel, best if you like a calm dark screen"},
+  {id:"envelopes",tag:"Option B",name:"Envelopes · fill the envelopes",cls:"env",L:ENV,sw:["#f7f3fb","#6b3fa0","#ffb48a","#2a1f38"],
+   note:"Soft lilac and plum with a peach highlight. Spending limits become envelopes that empty as you spend, and goals become jars that fill up, like cash budgeting on paper.",
+   meta:"Bottom tabs · Nunito · friendliest and most visual, best for building the habit"},
+  {id:"receipt",tag:"Option C",name:"Receipt · plain ledger",cls:"rec",L:REC,sw:["#fbfaf6","#141414","#ffe14d","#d2311b"],
+   note:"Black ink on off-white with a highlighter yellow. No cards or shadows: each screen reads like a printed receipt with dotted leaders and block progress bars, and tabs sit along the top.",
+   meta:"Top tabs · IBM Plex Sans and Mono · the most numbers on one screen, no decoration"},
+  {id:"sunrise",tag:"Option D",name:"Sunrise · steps to follow",cls:"sun",L:SUN,sw:["#ffffff","#2453ff","#5b3dff","#ff6b4a"],
+   note:"Bright white with a cobalt-to-coral gradient header. Payday turns into numbered steps (keep this, move that), goals are swipeable colour cards, and accounts stack like bank cards.",
+   meta:"Bottom tabs · Plus Jakarta Sans · energetic, most like a modern banking app"}
+];
+const screens = ["Payday","Spending","Goals","Accounts"];
+const caption = {Payday:"Payday",Spending:"Spending limits (step 3)",Goals:"Goals",Accounts:"Accounts"};
+document.getElementById("opts").innerHTML = OPTS.map(o=>`
+  <section class="opt" id="${o.id}">
+    <div class="opthead"><div><div class="tag">${o.tag}</div><h2>${o.name}</h2></div><div class="sw" aria-label="Colour palette">${o.sw.map(c=>`<span style="background:${c}" title="${c}"></span>`).join("")}</div></div>
+    <p class="note">${o.note}</p>
+    <div class="meta">${o.meta}</div>
+    <div class="row">${screens.map(s=>`<figure class="shot" style="margin:0"><div class="phone"><div class="scr ${o.cls}">${o.L[s]()}</div></div><figcaption>${caption[s]}</figcaption></figure>`).join("")}</div>
+  </section>`).join("");
+</script>
+
+</body></html>
