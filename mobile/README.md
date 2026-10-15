@@ -1,6 +1,6 @@
 # PayCheck mobile app
 
-The native iOS and Android version of PayCheck, built with Expo and React Native. It has five tabs:
+The native iOS and Android version of PayCheck, built with Expo and React Native. It has five tabs. Tap them in the bar at the bottom, or swipe left and right to move between them:
 
 - **Payday**: type in what you got paid and it tells you where every dollar goes: spending money, what each goal gets, and the transfers to make. Then log the payday.
 - **Spending**: log purchases as you make them. Each spending limit shows what's left until payday, turning yellow at 75% used and red at 100%.
@@ -35,7 +35,8 @@ Code layout:
 
 | Path | What it is |
 | --- | --- |
-| `src/app/_layout.tsx` | Tab navigation (Expo Router), fonts and the floating tab bar |
+| `src/app/_layout.tsx` | Swipeable tab navigation (Expo Router top tabs, shown at the bottom) and fonts |
+| `src/components/TabBar.tsx` | The floating tab bar, which lights up the tab you're swiping to |
 | `src/app/index.tsx` | Payday screen |
 | `src/app/spending.tsx` | Spending screen |
 | `src/app/goals.tsx` | Goals screen |
@@ -52,19 +53,25 @@ Code layout:
 
 ## On your iPhone home screen (free)
 
-The web version installs like an app from Safari, on iPhone, iPad and Mac, with no App Store and nothing to renew. It's published at **https://lem-d.github.io/PayCheck/** by GitHub Pages: every push to `main` that changes `mobile/` runs the tests, builds it (`npm run build:web`) and publishes it (`.github/workflows/pages.yml`).
+The web version installs like an app from Safari, on iPhone, iPad and Mac, with no App Store and nothing to renew. It's hosted on Render as a free static site, set up by [`render.yaml`](../render.yaml) at the top of the repo. Every push to `main` runs the tests, builds it (`npm run build:web`) and publishes it.
 
-One-time setup on GitHub: in the repo, open **Settings → Pages** and set **Source** to **GitHub Actions**. Then push, and the Actions tab shows the build.
+One-time setup:
+
+1. Make a free account at render.com and sign in with GitHub.
+2. Click **New**, then **Blueprint**, pick the `PayCheck` repo (let Render see it if it asks), and click **Apply**.
+3. When the first build finishes, the `paycheck` site's page shows its address, something like **https://paycheck.onrender.com**. If that name is taken, Render adds a few letters to the end.
 
 To install it on your iPhone:
 
-1. Open https://lem-d.github.io/PayCheck/ in Safari.
+1. Open that address in Safari.
 2. Tap the Share button, then **Add to Home Screen**, then **Add**.
 3. Open PayCheck from the home screen. It runs full screen with the P Bill icon.
 
 Your numbers are kept inside the home screen app on that device, separate from Safari and from Expo Go. To move them, use **Save a backup** and **Restore from a backup** on the Accounts tab; on the iPhone, Save a backup opens the share sheet so you can pick **Save to Files**. Back up now and then: if you delete the home screen icon, its data goes with it.
 
-`npm run build:web` builds it locally into `dist/`. The site lives under `/PayCheck/`, set by `experiments.baseUrl` in `app.json`.
+Render only hosts the web version. Expo Go doesn't use it: Expo Go loads the app from `npm start` on your computer (see "Run it on your phone" above), whichever way the web version is hosted.
+
+`npm run build:web` builds the web version locally into `dist/`.
 
 ## Installing it for real
 

@@ -8,8 +8,8 @@ Non-goals: no bank connections or transaction imports, no multi-user budgets, no
 
 ## Platform
 
-- **Phone app** (`mobile/`): Expo SDK 57, React Native, TypeScript, Expo Router for the two tabs. Runs in Expo Go during development and builds to standalone iOS and Android apps with EAS.
-- **Home screen app**: the phone app's web build (react-native-web), published to GitHub Pages at https://lem-d.github.io/PayCheck/ and added to the iPhone home screen from Safari. Lem uses Apple devices and picked this on Oct 15 because it's free and doesn't expire. `mobile/scripts/web-pwa.mjs` adds the manifest, icons, full-screen tags and a `404.html` fallback after `expo export`. Data lives in that home screen app's own storage (`localStorage` through AsyncStorage), and the app asks the browser to keep it (`navigator.storage.persist`).
+- **Phone app** (`mobile/`): Expo SDK 57, React Native, TypeScript, Expo Router for the five tabs. Runs in Expo Go during development and builds to standalone iOS and Android apps with EAS.
+- **Home screen app**: the phone app's web build (react-native-web), hosted on Render as a free static site (`render.yaml` at the repo root; every push to `main` rebuilds it) and added to the iPhone home screen from Safari. Lem uses Apple devices and picked this on Oct 15 because it's free and doesn't expire, then moved it from GitHub Pages to Render the same day. `mobile/scripts/web-pwa.mjs` adds the manifest, icons, full-screen tags and a `404.html` fallback after `expo export`. Data lives in that home screen app's own storage (`localStorage` through AsyncStorage), and the app asks the browser to keep it (`navigator.storage.persist`).
 - **Prototype** (`index.html`): the original single page in plain HTML, CSS and JavaScript. Kept as a reference; new features go in the phone app.
 - Light and dark themes follow the phone's setting. Colours and fonts live in `mobile/src/theme.ts`; see Look below.
 - Currency is Canadian dollars, formatted with `Intl.NumberFormat("en-CA", { currency: "CAD" })`. All amounts are rounded to cents when saved.
@@ -42,7 +42,7 @@ Harbour Gold, picked by Lem on Oct 14 from the colour and layout options. Gold a
 - **Rings.** Drawn with `react-native-svg`. Payday has one big ring holding the pay amount (gold arc for the share saved, blue for the rest). Spending has a small ring for the period, and each goal has a ring with its percent saved.
 - **Screens.** Each tab starts with a bold title and an optional pill (today's date, days left). Spending limits and accounts are two-column tile grids; debt tiles get a red outline.
 - **Logo.** K "P Bill" (a blue bill with a P and a gold coin stack) is the app icon and splash; A "Split Ring" is the second logo for small spots. Files and how the icons are made are in `mockups/logo/README.md`. The splash uses the light or dark background to match the phone.
-- **Tab bar.** A floating rounded bar inset from the screen edges, with outline icons and the active tab in gold.
+- **Tab bar.** A floating rounded bar inset from the screen edges, with outline icons and the active tab in gold. Swiping the screen left or right also changes tabs (Expo Router's top tabs, drawn at the bottom), and the gold follows the swipe as it happens.
 
 ## Storage
 
@@ -153,7 +153,7 @@ paydays: [{ ..., limits: [{ id, name, limit }], goals: [{ id, amount }] }]
 
 ## Screens
 
-The phone app has five tabs in a bottom bar: **Payday** (the default), **Spending**, **Goals**, **Accounts** and **History**. The prototype has the same tabs minus Spending; there, the last tab used is remembered per browser and `#payday`, `#goals` or `#accounts` in the URL picks one.
+The phone app has five tabs in a bottom bar, and you can swipe sideways between them: **Payday** (the default), **Spending**, **Goals**, **Accounts** and **History**. The prototype has the same tabs minus Spending; there, the last tab used is remembered per browser and `#payday`, `#goals` or `#accounts` in the URL picks one.
 
 1. **Payday** (built). One big "I got paid" amount. As you type, it shows keep for spending versus move to savings, notes (shortfall, unassigned money, savings rate), transfers to make per account, what each goal gets with amount to go, date and paydays left, and each category's spending money. "I moved the money" logs it. The last 6 paydays are listed. With no limits or goals yet, it shows a "Set up my goals" prompt.
 2. **Goals** (built). Savings goals with progress and the per-paycheque amount; pay frequency and spending limits ("Start with common categories" seeds Rent, Groceries, Phone, Transit or gas, Eating out, Fun money); and where anything left over goes.

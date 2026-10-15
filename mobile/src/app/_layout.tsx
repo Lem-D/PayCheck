@@ -1,21 +1,14 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { Outfit_400Regular, Outfit_500Medium, Outfit_600SemiBold, Outfit_700Bold, useFonts } from "@expo-google-fonts/outfit";
-import { DarkTheme, DefaultTheme, Tabs, ThemeProvider, type Theme } from "expo-router";
+import { DarkTheme, DefaultTheme, ThemeProvider, type Theme } from "expo-router";
+import TopTabs, { type MaterialTopTabBarProps } from "expo-router/js-top-tabs";
 import { StatusBar } from "expo-status-bar";
-import type { ComponentProps } from "react";
-import { View, type ColorValue } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { View } from "react-native";
+import TabBar from "../components/TabBar";
 import { StoreProvider } from "../lib/store";
-import { FONTS, useColors } from "../theme";
-
-type IconName = ComponentProps<typeof Ionicons>["name"];
-const icon =
-  (name: IconName) =>
-  ({ color, size }: { color: ColorValue; size: number }) => <Ionicons name={name} color={color as string} size={size - 2} />;
+import { useColors } from "../theme";
 
 export default function RootLayout() {
   const c = useColors();
-  const insets = useSafeAreaInsets();
   const [loaded] = useFonts({ Outfit_400Regular, Outfit_500Medium, Outfit_600SemiBold, Outfit_700Bold });
   if (!loaded) return <View style={{ flex: 1, backgroundColor: c.bg }} />;
   // The navigator paints behind the floating tab bar, so it needs the app's colours too.
@@ -26,39 +19,14 @@ export default function RootLayout() {
       <View style={{ flex: 1, backgroundColor: c.bg }}>
         <StoreProvider>
           <StatusBar style="auto" />
-          <Tabs
-            safeAreaInsets={{ bottom: 0 }}
-            screenOptions={{
-              headerShown: false,
-              sceneStyle: { backgroundColor: c.bg },
-              tabBarActiveTintColor: c.accent,
-              tabBarInactiveTintColor: c.muted,
-              tabBarLabelStyle: { fontFamily: FONTS.semibold, fontSize: 11, lineHeight: 15, flexShrink: 0 },
-              // A floating rounded bar, inset from the screen edges.
-              tabBarStyle: {
-                backgroundColor: c.surface,
-                borderTopWidth: 0,
-                marginHorizontal: 12,
-                marginBottom: Math.max(12, insets.bottom),
-                borderRadius: 20,
-                height: 68,
-                paddingTop: 6,
-                paddingBottom: 8,
-                elevation: c.shadow ? 3 : 0,
-                shadowColor: "#141928",
-                shadowOpacity: c.shadow ? 0.08 : 0,
-                shadowRadius: 8,
-                shadowOffset: { width: 0, height: 2 },
-              },
-              tabBarItemStyle: { paddingVertical: 0 },
-            }}
-          >
-            <Tabs.Screen name="index" options={{ title: "Payday", tabBarIcon: icon("cash-outline") }} />
-            <Tabs.Screen name="spending" options={{ title: "Spending", tabBarIcon: icon("cart-outline") }} />
-            <Tabs.Screen name="goals" options={{ title: "Goals", tabBarIcon: icon("flag-outline") }} />
-            <Tabs.Screen name="accounts" options={{ title: "Accounts", tabBarIcon: icon("wallet-outline") }} />
-            <Tabs.Screen name="history" options={{ title: "History", tabBarIcon: icon("stats-chart-outline") }} />
-          </Tabs>
+          {/* Swipe sideways between tabs, or tap them in the floating bar. */}
+          <TopTabs tabBarPosition="bottom" tabBar={(props: MaterialTopTabBarProps) => <TabBar {...props} />} screenOptions={{ sceneStyle: { backgroundColor: c.bg } }}>
+            <TopTabs.Screen name="index" options={{ title: "Payday" }} />
+            <TopTabs.Screen name="spending" options={{ title: "Spending" }} />
+            <TopTabs.Screen name="goals" options={{ title: "Goals" }} />
+            <TopTabs.Screen name="accounts" options={{ title: "Accounts" }} />
+            <TopTabs.Screen name="history" options={{ title: "History" }} />
+          </TopTabs>
         </StoreProvider>
       </View>
     </ThemeProvider>

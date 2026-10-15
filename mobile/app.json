@@ -25,7 +25,8 @@
       "name": "PayCheck",
       "shortName": "PayCheck",
       "themeColor": "#f2f5fa",
-      "backgroundColor": "#f2f5fa"
+      "backgroundColor": "#f2f5fa",
+      "output": "single"
     },
     "plugins": [
       "expo-router",
@@ -45,9 +46,6 @@
       ],
       "expo-sharing"
     ],
-    "scheme": "paycheck",
-    "experiments": {
-      "baseUrl": "/PayCheck"
-    }
+    "scheme": "paycheck"
   }
 }

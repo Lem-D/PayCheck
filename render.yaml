@@ -1,0 +1,26 @@
+# Render Blueprint: hosts the PayCheck home screen app (the web build of mobile/) as a free static site.
+# Every push to main rebuilds it. In Render: New > Blueprint, pick this repo, Apply.
+services:
+  - type: web
+    name: paycheck
+    runtime: static
+    rootDir: mobile
+    buildCommand: npm ci && npm test && npm run build:web
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+    routes:
+      # Send links like /goals to the app, which picks the tab.
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      # Check for a new version each time the app opens. The hashed JS files can be cached for good.
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+      - path: /_expo/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
