@@ -1,0 +1,26 @@
+rules_version = '2';
+
+// PayCheck sync. Each person can only read and write their own data, under users/{their id}.
+// Paste this into Firebase console > Firestore Database > Rules, then click Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid}/{document=**} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Accounts and the plan: a save is only kept if it's newer than the one already there,
+    // so a change made offline can't overwrite a later one from another device.
+    match /users/{uid}/sections/{name} {
+      allow create: if request.auth != null && request.auth.uid == uid && name in ['accounts', 'plan']
+        && request.resource.data.json is string && request.resource.data.updatedAt is number;
+      allow update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.json is string && request.resource.data.updatedAt is number
+        && request.resource.data.updatedAt > resource.data.updatedAt;
+    }
+
+    match /users/{uid}/purchases/{id} {
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.amount is number && request.resource.data.at is number;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import BackupPanel from "../components/BackupPanel";
+import SyncPanel from "../components/SyncPanel";
 import AccountEditor, { type ListName } from "../components/AccountEditor";
 import Screen from "../components/Screen";
 import { Bar, Button, Cell, Grid, Muted, Section, T, Tile, Title } from "../components/ui";
@@ -123,6 +124,7 @@ export default function AccountsScreen() {
       </Tile>
       {group("accounts", "Accounts", have, "No accounts yet. Add your chequing, savings and TFSA with today's balances.", "+ Add account")}
       {group("debts", "What you owe", owe, "Nothing owed yet. Add credit cards, loans or money you owe someone.", "+ Add debt")}
+      <SyncPanel />
       <BackupPanel />
     </Screen>
   );
