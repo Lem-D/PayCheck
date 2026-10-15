@@ -86,7 +86,7 @@ The app shows when you last saved a backup, and turns that line yellow after 30 
 
 ## Sync between devices
 
-Sign in once and your numbers stay the same in Expo Go, the home screen app and on your other devices. It uses Firebase, which is free for this. You set it up once:
+PayCheck asks you to sign in when it opens. Once you do, your numbers stay the same in Expo Go, the home screen app and on your other devices. It uses Firebase, which is free for this. You set it up once:
 
 1. Go to [console.firebase.google.com](https://console.firebase.google.com), sign in with a Google account, and click **Create a project**. Name it `PayCheck`, turn off Google Analytics, and create it.
 2. In the menu, open **Build → Authentication**, click **Get started**, choose **Email/Password**, switch on the first option, and click **Save**.
@@ -96,12 +96,12 @@ Sign in once and your numbers stay the same in Expo Go, the home screen app and 
 6. Open `mobile/src/lib/sync/config.ts` and replace `null` with the `{ ... }` part you copied, so it reads `export const firebaseConfig: FirebaseOptions | null = { apiKey: "...", ... };`. These values aren't secret, so it's fine to commit them.
 7. In `mobile`, run `npm install`, then `npm run deploy:web` to update the home screen app. Restart `npm start` for Expo Go.
 
-Then, in the app, open the **Accounts** tab and scroll to **Sync**:
+Then open the app. It starts on a sign-in screen, and nothing else can be used until you sign in:
 
 - On the device that has your numbers, type an email and password and tap **Create account**.
 - On each other device, tap **Sign in** with the same email and password.
 
-If a device already has different numbers from your account, it asks which to keep. Changes show up on your other devices within a few seconds, and changes made offline are sent when you're back online. If two devices change the same thing, the newest change wins; purchases logged on both are all kept. **Forgot password?** emails you a reset link. **Sign out** stops syncing and leaves your numbers on that device.
+If a device already has different numbers from your account, it asks which to keep. Changes show up on your other devices within a few seconds, and changes made offline are sent when you're back online. If two devices change the same thing, the newest change wins; purchases logged on both are all kept. **Forgot password?** emails you a reset link. **Sign out** (at the bottom of the Accounts tab) goes back to the sign-in screen and leaves your numbers on that device.
 
 ## Commit your changes
 

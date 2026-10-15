@@ -54,7 +54,7 @@ Harbour Gold, picked by Lem on Oct 14 from the colour and layout options. Gold a
 - Purchases sync one at a time, so purchases logged on two devices at once both survive.
 - Data still lives on the device first (AsyncStorage). The sync engine (`mobile/src/lib/sync/engine.ts`) remembers in `paycheque-plan-sync` which changes haven't been confirmed by the cloud, and sends them on the next start, so changes made offline or right before closing the app aren't lost.
 - Signing in on a device whose numbers differ from the account's asks which to keep. An empty device takes the account's numbers, and an empty account takes the device's.
-- Signing out stops syncing and keeps the data on the device.
+- The app opens on a sign-in screen (`mobile/src/components/SignInScreen.tsx`, laid over the tabs in `_layout.tsx`) and can't be used until someone signs in; Lem asked for this on Oct 15. Signing out (Accounts tab) stops syncing, keeps the data on the device, and brings the sign-in screen back.
 - Sync is hidden until a Firebase project's config is put in `mobile/src/lib/sync/config.ts`. Firebase is loaded only when it's set, as its own bundle on the web.
 - Tests: `engine.test.ts` runs two or three simulated devices against an in-memory cloud, including going offline. It was also checked on Oct 15 with three browser copies of the web build against the Firebase emulators (`EXPO_PUBLIC_FIREBASE_EMULATOR=127.0.0.1` points a build at them; build without it, and with `--clear`, for real use).
 
