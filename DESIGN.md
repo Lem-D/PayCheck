@@ -46,7 +46,17 @@ Harbour Gold, picked by Lem on Oct 14 from the colour and layout options. Gold a
 
 ## Storage
 
-**Phone app.** Data is stored on the phone with AsyncStorage, under the same keys and in the same shapes as the prototype (`paycheque-plan-accounts`, `paycheque-plan-plan`), plus `paycheque-plan-spending` for purchases. It saves 0.4 seconds after the last change. Older saved plans are migrated on load (the old `pay` and percentage `savings` fields are dropped). There's no server or sync yet; adding one later means syncing these three documents.
+**Phone app.** Data is stored on the phone with AsyncStorage, under the same keys and in the same shapes as the prototype (`paycheque-plan-accounts`, `paycheque-plan-plan`), plus `paycheque-plan-spending` for purchases. It saves 0.4 seconds after the last change. Older saved plans are migrated on load (the old `pay` and percentage `savings` fields are dropped).
+
+**Sync between devices (phone app).** Picked by Lem on Oct 15. Signing in (email and password, Firebase Authentication) links the device's data to the account, and Firestore holds the account's copy, all under `users/{uid}`: `sections/accounts` and `sections/plan` each store the whole document as JSON with an `updatedAt` time, and each purchase is its own document in `purchases/{id}`. Firebase was chosen because its free plan doesn't pause idle projects and its JS SDK works in Expo Go, the home screen app and native builds.
+
+- Accounts and the plan sync as a whole and the newest change wins. `firestore.rules` refuses a save whose `updatedAt` isn't newer than the stored one, so a change made offline can't overwrite a later one from another device when it finally arrives.
+- Purchases sync one at a time, so purchases logged on two devices at once both survive.
+- Data still lives on the device first (AsyncStorage). The sync engine (`mobile/src/lib/sync/engine.ts`) remembers in `paycheque-plan-sync` which changes haven't been confirmed by the cloud, and sends them on the next start, so changes made offline or right before closing the app aren't lost.
+- Signing in on a device whose numbers differ from the account's asks which to keep. An empty device takes the account's numbers, and an empty account takes the device's.
+- Signing out stops syncing and keeps the data on the device.
+- Sync is hidden until a Firebase project's config is put in `mobile/src/lib/sync/config.ts`. Firebase is loaded only when it's set, as its own bundle on the web.
+- Tests: `engine.test.ts` runs two or three simulated devices against an in-memory cloud, including going offline. It was also checked on Oct 15 with three browser copies of the web build against the Firebase emulators (`EXPO_PUBLIC_FIREBASE_EMULATOR=127.0.0.1` points a build at them; build without it, and with `--clear`, for real use).
 
 **Backup file (phone app).** The Accounts tab's "Your data" section saves everything to one JSON file and restores it, so data survives a lost phone, a reinstall, or a move from Expo Go to the installed app. Logic is in `mobile/src/lib/backup.ts` (covered by `backup.test.ts`); the share sheet and file picker are in `backupFile.ts` (`expo-sharing`, `expo-file-system`, `expo-document-picker`).
 

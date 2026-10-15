@@ -8,7 +8,7 @@ The native iOS and Android version of PayCheck, built with Expo and React Native
 - **Accounts**: your accounts and debts, with net worth. At the bottom, **Your data** saves everything to a backup file and restores it.
 - **History**: each pay period with what you saved and which limits you kept, your streak, and whether each goal is on track for its date.
 
-Your data is saved on the phone (AsyncStorage). There's no account or server.
+Your data is saved on the device (AsyncStorage). Signing in on the Accounts tab syncs it between devices through Firebase; see "Sync between devices" in the [main README](../README.md#sync-between-devices).
 
 The look is Harbour Gold: navy and white with gold for saving and sky blue for spending, progress rings and rounded tiles, in light or dark to match your phone. See the Look section in [DESIGN.md](../DESIGN.md).
 
@@ -47,7 +47,10 @@ Code layout:
 | `src/lib/allocate.ts` | How a paycheque is divided between spending and goals, and payday logging |
 | `src/lib/spending.ts` | Pay periods and what's left in each spending limit |
 | `src/lib/history.ts` | Past pay periods, limits kept, savings and goal pace |
-| `src/lib/store.tsx` | App state and saving to the phone |
+| `src/lib/store.tsx` | App state, saving to the device, and starting sync when signed in |
+| `src/lib/sync/` | Sync between devices: the rules for merging (`merge.ts`), the engine that keeps a device and the account in step (`engine.ts`, tested in `engine.test.ts`), Firebase sign-in and storage (`firebase.ts`), and the project settings (`config.ts`) |
+| `src/components/SyncPanel.tsx` | The Sync section on the Accounts tab |
+| `firestore.rules` | Firestore security rules: each person only sees their own data, and an older change can't replace a newer one |
 | `src/lib/backup.ts`, `backupFile.ts` | The backup file: what's in it and checking it (`backup.ts`), and saving or picking it on the phone (`backupFile.ts`) |
 | `src/types.ts` | Data types shared by everything |
 
