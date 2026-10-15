@@ -9,6 +9,7 @@ Non-goals: no bank connections or transaction imports, no multi-user budgets, no
 ## Platform
 
 - **Phone app** (`mobile/`): Expo SDK 57, React Native, TypeScript, Expo Router for the two tabs. Runs in Expo Go during development and builds to standalone iOS and Android apps with EAS.
+- **Home screen app**: the phone app's web build (react-native-web), published to GitHub Pages at https://lem-d.github.io/PayCheck/ and added to the iPhone home screen from Safari. Lem uses Apple devices and picked this on Oct 15 because it's free and doesn't expire. `mobile/scripts/web-pwa.mjs` adds the manifest, icons, full-screen tags and a `404.html` fallback after `expo export`. Data lives in that home screen app's own storage (`localStorage` through AsyncStorage), and the app asks the browser to keep it (`navigator.storage.persist`).
 - **Prototype** (`index.html`): the original single page in plain HTML, CSS and JavaScript. Kept as a reference; new features go in the phone app.
 - Light and dark themes follow the phone's setting. Colours and fonts live in `mobile/src/theme.ts`; see Look below.
 - Currency is Canadian dollars, formatted with `Intl.NumberFormat("en-CA", { currency: "CAD" })`. All amounts are rounded to cents when saved.
@@ -46,6 +47,16 @@ Harbour Gold, picked by Lem on Oct 14 from the colour and layout options. Gold a
 ## Storage
 
 **Phone app.** Data is stored on the phone with AsyncStorage, under the same keys and in the same shapes as the prototype (`paycheque-plan-accounts`, `paycheque-plan-plan`), plus `paycheque-plan-spending` for purchases. It saves 0.4 seconds after the last change. Older saved plans are migrated on load (the old `pay` and percentage `savings` fields are dropped). There's no server or sync yet; adding one later means syncing these three documents.
+
+**Backup file (phone app).** The Accounts tab's "Your data" section saves everything to one JSON file and restores it, so data survives a lost phone, a reinstall, or a move from Expo Go to the installed app. Logic is in `mobile/src/lib/backup.ts` (covered by `backup.test.ts`); the share sheet and file picker are in `backupFile.ts` (`expo-sharing`, `expo-file-system`, `expo-document-picker`).
+
+```js
+{ kind: "paycheck-backup", version: 1, exportedAt, accounts: { accounts, debts }, plan, spending }
+```
+
+- Saving opens the share sheet (Save to Files, iCloud Drive, AirDrop, email), named like `PayCheck backup 2026-10-15.json`. In a browser it downloads.
+- Restoring shows what the file holds and replaces all data after a second tap. Each part goes through the same normalize functions as data loaded at startup, so older or partial files fill in defaults. Files that aren't PayCheck backups, or come from a newer version, are refused with a message.
+- The last backup date is kept under `paycheque-plan-last-backup` and turns yellow after 30 days.
 
 **Prototype.** Two layers, written on every change:
 
