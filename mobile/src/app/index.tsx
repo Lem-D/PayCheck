@@ -1,10 +1,12 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { StyleSheet, Switch, View } from "react-native";
+import ReminderPanel from "../components/ReminderPanel";
 import Screen from "../components/Screen";
 import { Button, Cell, Grid, Muted, Note, NumberField, Ring, Section, T, Tile, Title } from "../components/ui";
 import { accountName, allocate, fmtDate, logPayday, paydaysLeft, remaining } from "../lib/allocate";
 import { cents, money } from "../lib/money";
+import { isPaydayToday } from "../lib/paydays";
 import { useStore } from "../lib/store";
 import { font, tint, useColors } from "../theme";
 
@@ -65,6 +67,8 @@ export default function PaydayScreen() {
   return (
     <Screen>
       <Title pill={new Date().toLocaleDateString("en-CA", { weekday: "short", month: "short", day: "numeric" })}>Payday</Title>
+
+      {isPaydayToday(plan) && !pay && !logged ? <Note kind="good">It's payday. Type in what landed in your account to see where it goes.</Note> : null}
 
       <View style={st.ringWrap}>
         <Ring value={show ? savedPct : 0} size={236} stroke={18} color={c.accent} track={show && keep > 0 ? c.spend : c.track}>
@@ -204,6 +208,8 @@ export default function PaydayScreen() {
           </Tile>
         </Section>
       )}
+
+      <ReminderPanel />
     </Screen>
   );
 }

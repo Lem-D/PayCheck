@@ -67,6 +67,8 @@ export interface Plan {
   /** Where leftover money goes: "goal:<id>", "acct:<id>", or "" to keep it in chequing. */
   extraTo: string;
   paydays: Payday[];
+  /** A payday on the schedule ("YYYY-MM-DD"), picked on the Payday tab for reminders. Empty or missing uses the last logged payday. */
+  nextPayday?: string;
 }
 
 export interface Purchase {

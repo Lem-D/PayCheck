@@ -11,9 +11,9 @@ A personal budgeting app built around one idea: every paycheque gets split up fr
 
 It has five tabs. Tap them in the bar at the bottom, or swipe left and right:
 
-- **Payday**: type in what you got paid and it shows where every dollar goes, and the transfers to make.
+- **Payday**: type in what you got paid and it shows where every dollar goes, and the transfers to make. It can also remind you on payday.
 - **Spending**: log purchases and see what's left in each spending limit until payday.
-- **Goals**: savings goals with a target and date, how often you're paid, and your spending limits.
+- **Goals**: savings goals with a target and a date you pick from a calendar, how often you're paid, and your spending limits.
 - **Accounts**: your accounts and debts, net worth, sync, and backups of your data.
 - **History**: each pay period, which limits you kept, what you saved, and how each goal is pacing.
 
@@ -103,6 +103,15 @@ Then open the app. It starts on a sign-in screen, and nothing else can be used u
 
 If a device already has different numbers from your account, it asks which to keep. Changes show up on your other devices within a few seconds, and changes made offline are sent when you're back online. If two devices change the same thing, the newest change wins; purchases logged on both are all kept. **Forgot password?** emails you a reset link. **Sign out** (at the bottom of the Accounts tab) goes back to the sign-in screen and leaves your numbers on that device.
 
+## Payday reminders
+
+At the bottom of the **Payday** tab, pick your next payday from the calendar. PayCheck works out the ones after it from how often you're paid (set on the Goals tab), and the Payday tab says "It's payday" on each one until you log it.
+
+- **In Expo Go** (or an installed app), switch on **Remind me on payday** and allow notifications. You get one at 9 AM each payday, or at 7 AM, noon or 5 PM if you pick that.
+- **In the home screen app**, which can't send notifications by itself, tap **Add paydays to my calendar** and add them when your iPhone asks. Each payday then shows in Calendar with an alert, and repeats on its own. If your pay schedule changes, delete those events and add them again.
+
+Twice-a-month pay is the 15th and the last day of the month when you pick either of those. Otherwise the two days are 15 apart, such as the 1st and 16th.
+
 ## Commit your changes
 
 The app's code and settings live in this repo, so commit after changing them (for example after the first `deploy:web`):
@@ -157,3 +166,5 @@ npm run build:web  # build the home screen version into dist/ without publishing
 3. **Track spending against your limits** (done). Log purchases as they happen; each limit turns yellow and red as you get close.
 4. **Habit tracking** (done). A history per pay period of the limits you kept, what you saved, and how each goal is tracking.
 5. **Sync between devices** (done). Sign in once and your numbers stay the same on every device, without backup files.
+6. **Goal date picker** (done). Pick a goal's date from a calendar, or tap 3 months, 6 months, 1 year or end of this year.
+7. **Payday reminders** (done). A notification on each payday in Expo Go, or calendar alerts in the home screen app.

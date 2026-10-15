@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import SignInScreen from "../components/SignInScreen";
 import TabBar from "../components/TabBar";
+import { ReminderProvider } from "../lib/reminder";
 import { StoreProvider, useStore } from "../lib/store";
 import { useColors } from "../theme";
 
@@ -19,16 +20,18 @@ export default function RootLayout() {
     <ThemeProvider value={navTheme}>
       <View style={{ flex: 1, backgroundColor: c.bg }}>
         <StoreProvider>
-          <StatusBar style="auto" />
-          {/* Swipe sideways between tabs, or tap them in the floating bar. */}
-          <TopTabs tabBarPosition="bottom" tabBar={(props: MaterialTopTabBarProps) => <TabBar {...props} />} screenOptions={{ sceneStyle: { backgroundColor: c.bg } }}>
-            <TopTabs.Screen name="index" options={{ title: "Payday" }} />
-            <TopTabs.Screen name="spending" options={{ title: "Spending" }} />
-            <TopTabs.Screen name="goals" options={{ title: "Goals" }} />
-            <TopTabs.Screen name="accounts" options={{ title: "Accounts" }} />
-            <TopTabs.Screen name="history" options={{ title: "History" }} />
-          </TopTabs>
-          <SignInGate />
+          <ReminderProvider>
+            <StatusBar style="auto" />
+            {/* Swipe sideways between tabs, or tap them in the floating bar. */}
+            <TopTabs tabBarPosition="bottom" tabBar={(props: MaterialTopTabBarProps) => <TabBar {...props} />} screenOptions={{ sceneStyle: { backgroundColor: c.bg } }}>
+              <TopTabs.Screen name="index" options={{ title: "Payday" }} />
+              <TopTabs.Screen name="spending" options={{ title: "Spending" }} />
+              <TopTabs.Screen name="goals" options={{ title: "Goals" }} />
+              <TopTabs.Screen name="accounts" options={{ title: "Accounts" }} />
+              <TopTabs.Screen name="history" options={{ title: "History" }} />
+            </TopTabs>
+            <SignInGate />
+          </ReminderProvider>
         </StoreProvider>
       </View>
     </ThemeProvider>

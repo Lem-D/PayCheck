@@ -47,6 +47,10 @@ Code layout:
 | `src/lib/allocate.ts` | How a paycheque is divided between spending and goals, and payday logging |
 | `src/lib/spending.ts` | Pay periods and what's left in each spending limit |
 | `src/lib/history.ts` | Past pay periods, limits kept, savings and goal pace |
+| `src/lib/paydays.ts` | The pay schedule: upcoming paydays, "it's payday", and the calendar file |
+| `src/lib/reminder.tsx`, `notify.ts`, `notify.web.ts` | Payday reminders: the on/off and time setting, notifications on the phone (`notify.ts`), and the calendar file in the browser (`notify.web.ts`) |
+| `src/components/DateField.tsx` | The calendar date picker used for goal dates and the next payday |
+| `src/components/ReminderPanel.tsx` | The Payday reminder section on the Payday tab |
 | `src/lib/store.tsx` | App state, saving to the device, and starting sync when signed in |
 | `src/lib/sync/` | Sync between devices: the rules for merging (`merge.ts`), the engine that keeps a device and the account in step (`engine.ts`, tested in `engine.test.ts`), Firebase sign-in and storage (`firebase.ts`), and the project settings (`config.ts`) |
 | `src/components/SignInScreen.tsx` | The sign-in screen the app opens on |

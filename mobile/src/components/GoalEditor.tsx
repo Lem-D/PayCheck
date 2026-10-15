@@ -1,8 +1,10 @@
 import { useState, type ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { cents, num, uid } from "../lib/money";
+import { addMonths, toDate } from "../lib/paydays";
 import { font, useColors } from "../theme";
 import type { Account, Goal } from "../types";
+import DateField from "./DateField";
 import { Button, Choice, Input, Muted, T, Tile } from "./ui";
 
 interface Props {
@@ -13,11 +15,18 @@ interface Props {
   onDelete?: () => void;
 }
 
-const today = () => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-};
-const validDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(new Date(`${s}T12:00:00`).getTime());
+
+/** Quick picks for a goal's date: a few months out, a year out, or the end of the year. */
+function shortcuts() {
+  const today = toDate();
+  const yearEnd = `${today.slice(0, 4)}-12-31`;
+  return [
+    { label: "3 months", date: addMonths(today, 3) },
+    { label: "6 months", date: addMonths(today, 6) },
+    { label: "1 year", date: addMonths(today, 12) },
+    { label: "End of this year", date: yearEnd },
+  ];
+}
 
 export default function GoalEditor({ existing, accounts, onSave, onCancel, onDelete }: Props) {
   const c = useColors();
@@ -33,11 +42,10 @@ export default function GoalEditor({ existing, accounts, onSave, onCancel, onDel
   const submit = () => {
     const n = name.trim();
     const t = parseFloat(target.replace(",", "."));
-    const d = date.trim();
+    const d = date;
     if (!n) return setError("Give the goal a name, like Emergency fund.");
     if (!Number.isFinite(t) || t <= 0) return setError("Enter a target amount, like 5000.");
-    if (d && !validDate(d)) return setError("Write the date as YYYY-MM-DD, like 2027-06-30, or leave it empty.");
-    if (d && d < today()) return setError("Pick a date in the future, or leave it empty.");
+    if (d && d < toDate()) return setError("Pick a date that hasn't passed yet, or remove the date.");
     onSave({ id: existing?.id ?? uid(), name: n, accountId, target: cents(t), saved: cents(num(saved.replace(",", "."))), date: d });
   };
 
@@ -61,7 +69,7 @@ export default function GoalEditor({ existing, accounts, onSave, onCancel, onDel
       </View>
       {field(
         "Reach it by",
-        <Input value={date} onChangeText={setDate} placeholder="YYYY-MM-DD" keyboardType="numbers-and-punctuation" autoCapitalize="none" style={font()} accessibilityLabel="Reach it by" />,
+        <DateField label="Reach it by" value={date} onChange={setDate} placeholder="No date" min={toDate()} shortcuts={shortcuts()} clearLabel="Remove date" />,
         "Optional. Without a date, the goal only gets leftover money.",
       )}
       {field(

@@ -114,6 +114,7 @@ plan = {
   goals: [{ id, name, accountId, target, saved, date }],  // date is "YYYY-MM-DD" or ""
   extraTo: "goal:<id>" | "acct:<id>" | "",    // where leftover money goes; "" keeps it in chequing
   paydays: [{ date, pay, spend, saved, moves: [{ accountId, name, amount }], applied }],
+  nextPayday,                                 // "YYYY-MM-DD" picked on the Payday tab for reminders; optional
   updatedAt
 }
 ```
@@ -161,12 +162,22 @@ paydays: [{ ..., limits: [{ id, name, limit }], goals: [{ id, amount }] }]
 - **Summary** covers finished periods only: share of limits kept, total and average saved per payday, savings rate, and the streak of periods in a row (counting back from the latest) where every limit was kept. Each category shows how many periods it was kept and a dot per period for the last 8.
 - **Goal pace.** What each goal got on average over the last three paydays that recorded it, against what it needs per paycheque now (`perPaycheque`). On track if it's getting at least that much, behind if not. At the current pace, the finish date is `now + ceil(remaining / average) × period length`. Goals without a date show their pace only.
 
+### Payday reminders (built)
+
+Asked for by Lem on Oct 15, with the goal date picker. The pay schedule counts forward from one known payday: `plan.nextPayday` when it's been picked, or else the last logged payday (`payAnchor` in `mobile/src/lib/paydays.ts`). Dates are worked out as whole days so daylight saving can't move them.
+
+- Weekly and every 2 weeks step 7 or 14 days. Once a month keeps the same day, using the last day in shorter months.
+- Twice a month: the 15th or the last day gives the 15th and the last day; another day gives two days 15 apart (the 1st and 16th, the 5th and 20th).
+- **Expo Go and installed apps** schedule a local notification (`expo-notifications`) at the chosen hour on each of the next 16 paydays, and top them up whenever the app opens or the schedule changes. 9 AM is the default; 7 AM, noon and 5 PM can be picked. Whether reminders are on and the hour are kept on the device only (`paycheque-plan-reminder`), because each device asks for its own permission.
+- **The home screen app** can't schedule notifications without a push server, so it makes a calendar file instead: one repeating event per series (two for twice a month) at the chosen hour with an alert, no time zone. A day past the 28th repeats with `BYSETPOS=-1` so short months use their last day.
+- The Payday tab shows "It's payday" on a scheduled payday until one is logged that day.
+
 ## Screens
 
 The phone app has five tabs in a bottom bar, and you can swipe sideways between them: **Payday** (the default), **Spending**, **Goals**, **Accounts** and **History**. The prototype has the same tabs minus Spending; there, the last tab used is remembered per browser and `#payday`, `#goals` or `#accounts` in the URL picks one.
 
-1. **Payday** (built). One big "I got paid" amount. As you type, it shows keep for spending versus move to savings, notes (shortfall, unassigned money, savings rate), transfers to make per account, what each goal gets with amount to go, date and paydays left, and each category's spending money. "I moved the money" logs it. The last 6 paydays are listed. With no limits or goals yet, it shows a "Set up my goals" prompt.
-2. **Goals** (built). Savings goals with progress and the per-paycheque amount; pay frequency and spending limits ("Start with common categories" seeds Rent, Groceries, Phone, Transit or gas, Eating out, Fun money); and where anything left over goes.
+1. **Payday** (built). One big "I got paid" amount. As you type, it shows keep for spending versus move to savings, notes (shortfall, unassigned money, savings rate), transfers to make per account, what each goal gets with amount to go, date and paydays left, and each category's spending money. "I moved the money" logs it. The last 6 paydays are listed. With no limits or goals yet, it shows a "Set up my goals" prompt. At the bottom, **Payday reminder** has the next payday (picked from a calendar), the paydays after it, and the reminder switch or the calendar button.
+2. **Goals** (built). Savings goals with progress and the per-paycheque amount; a goal's date is picked from a calendar that opens under the field, with quick picks for 3 months, 6 months, 1 year and the end of this year; pay frequency and spending limits ("Start with common categories" seeds Rent, Groceries, Phone, Transit or gas, Eating out, Fun money); and where anything left over goes.
 3. **Accounts** (built). Net worth headline with a have/owe bar, then account and debt lists. Tapping a row opens an inline editor; delete needs a second tap to confirm.
 4. **Spending** (built, phone app). Left to spend this period with days until payday, a quick "Log a purchase" form (amount, which limit, optional note), each limit with what's left and its colour, and this period's purchases with delete.
 5. **History** (built, phone app). A ring for the share of limits kept with the streak, saved in total and per payday, each goal's pace (on track or behind, needed versus getting per pay), each limit's record with a dot per pay period, and one tile per pay period with what was saved and which limits went over.
@@ -177,3 +188,6 @@ The phone app has five tabs in a bottom bar, and you can swipe sideways between 
 2. Payday from goals. Done.
 3. Track spending against limits. Done in the phone app.
 4. Habit history. Done in the phone app.
+5. Sync between devices. Done in the phone app.
+6. Goal date picker. Done in the phone app.
+7. Payday reminders. Done in the phone app.

@@ -19,6 +19,7 @@ export function normalizePlan(d: unknown): Plan {
     categories: arr(o.categories),
     goals: arr<Plan["goals"][number]>(o.goals).map((g) => ({ ...g, target: num(g.target), saved: num(g.saved), date: g.date || "", accountId: g.accountId || "" })),
     extraTo: typeof o.extraTo === "string" ? o.extraTo : "",
+    ...(typeof o.nextPayday === "string" && o.nextPayday ? { nextPayday: o.nextPayday } : {}),
     paydays: arr<Payday>(o.paydays)
       .filter((p) => p && typeof p.date === "number")
       .map((p) => ({
