@@ -2,8 +2,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getApps, initializeApp, type FirebaseApp, type FirebaseOptions } from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
 import {
+  browserLocalPersistence,
   createUserWithEmailAndPassword,
-  getAuth,
+  indexedDBLocalPersistence,
   initializeAuth,
   onAuthStateChanged,
   sendPasswordResetEmail,
@@ -32,7 +33,8 @@ export function connect(config: FirebaseOptions, emulator?: string): Cloud {
   if (cloud) return cloud;
   const app: FirebaseApp = getApps()[0] ?? initializeApp(config);
   let auth: Auth;
-  if (Platform.OS === "web") auth = getAuth(app);
+  // Email and password only, so the web build skips Google's sign-in pop-up helpers.
+  if (Platform.OS === "web") auth = initializeAuth(app, { persistence: [indexedDBLocalPersistence, browserLocalPersistence] });
   else {
     // The React Native build of Firebase Auth has this; its types only list it for that build.
     const { getReactNativePersistence } = firebaseAuth as unknown as { getReactNativePersistence: (s: typeof AsyncStorage) => Persistence };
