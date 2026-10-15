@@ -2,9 +2,10 @@ import { Outfit_400Regular, Outfit_500Medium, Outfit_600SemiBold, Outfit_700Bold
 import { DarkTheme, DefaultTheme, ThemeProvider, type Theme } from "expo-router";
 import TopTabs, { type MaterialTopTabBarProps } from "expo-router/js-top-tabs";
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import SignInScreen from "../components/SignInScreen";
 import TabBar from "../components/TabBar";
-import { StoreProvider } from "../lib/store";
+import { StoreProvider, useStore } from "../lib/store";
 import { useColors } from "../theme";
 
 export default function RootLayout() {
@@ -27,8 +28,20 @@ export default function RootLayout() {
             <TopTabs.Screen name="accounts" options={{ title: "Accounts" }} />
             <TopTabs.Screen name="history" options={{ title: "History" }} />
           </TopTabs>
+          <SignInGate />
         </StoreProvider>
       </View>
     </ThemeProvider>
   );
+}
+
+/** Covers the tabs with the sign-in screen until someone signs in, so nothing in the app can be used signed out. */
+function SignInGate() {
+  const c = useColors();
+  const { ready, sync } = useStore();
+  if (!sync.available) return null;
+  const waiting = !ready || !sync.authKnown;
+  const show = waiting || !sync.email || sync.status.state === "choose";
+  if (!show) return null;
+  return <View style={[StyleSheet.absoluteFill, { backgroundColor: c.bg }]}>{waiting ? null : <SignInScreen />}</View>;
 }

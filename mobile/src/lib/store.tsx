@@ -17,6 +17,8 @@ export interface Sync {
   status: SyncStatus;
   /** The signed-in account's email, or null. */
   email: string | null;
+  /** True once it's known whether someone is signed in on this device. */
+  authKnown: boolean;
   /** Each returns an error message to show, or null when it worked. */
   signIn(email: string, password: string): Promise<string | null>;
   signUp(email: string, password: string): Promise<string | null>;
@@ -72,6 +74,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [spending, setSpending] = useState<SpendingDoc>(emptySpending);
   const [status, setStatus] = useState<SyncStatus>({ state: "off" });
   const [email, setEmail] = useState<string | null>(null);
+  const [authKnown, setAuthKnown] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const engine = useRef<SyncEngine | null>(null);
   const uid = useRef<string | null>(null);
@@ -96,6 +99,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       const cloud = fb.connect(activeConfig, emulatorHost);
       fb.watchUser(cloud, (user) => {
         setEmail(user?.email ?? null);
+        setAuthKnown(true);
         uid.current = user?.uid ?? null;
         engine.current?.pause();
         engine.current = null;
@@ -166,6 +170,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       available: !!activeConfig,
       status,
       email,
+      authKnown,
       signIn: (em, pw) => attempt((fb, c) => fb.signIn(c, em, pw)),
       signUp: (em, pw) => attempt((fb, c) => fb.signUp(c, em, pw)),
       resetPassword: (em) => attempt((fb, c) => fb.resetPassword(c, em)),
@@ -181,7 +186,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         if (uid.current) engine.current?.link(uid.current);
       },
     };
-  }, [status, email, withCloud]);
+  }, [status, email, authKnown, withCloud]);
 
   return <StoreContext.Provider value={{ ready, saveError, acc, setAcc, plan, setPlan, spending, setSpending, sync }}>{children}</StoreContext.Provider>;
 }
