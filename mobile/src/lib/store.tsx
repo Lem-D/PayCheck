@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform } from "react-native";
 import { createContext, useContext, useEffect, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { emptyAccounts, emptyPlan, emptySpending, type AccountsDoc, type Plan, type SpendingDoc } from "../types";
 import { normalizeAccounts, normalizePlan, normalizeSpending } from "./normalize";
@@ -38,6 +39,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    // In a browser or the home screen app, ask for the data to be kept even when the device is low on space.
+    if (Platform.OS === "web") navigator.storage?.persist?.().catch(() => {});
     Promise.all([load(KEYS.accounts, normalizeAccounts), load(KEYS.plan, normalizePlan), load(KEYS.spending, normalizeSpending)]).then(([a, p, sp]) => {
       setAcc(a);
       setPlan(p);
