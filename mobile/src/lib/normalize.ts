@@ -1,5 +1,5 @@
 import { num } from "./money";
-import { emptyAccounts, emptyPlan, emptySpending, type AccountsDoc, type Frequency, type Plan, type Purchase, type SpendingDoc } from "../types";
+import { emptyAccounts, emptyPlan, emptySpending, type AccountsDoc, type Frequency, type Payday, type Plan, type Purchase, type SpendingDoc } from "../types";
 
 const arr = <T,>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : []);
 
@@ -19,7 +19,17 @@ export function normalizePlan(d: unknown): Plan {
     categories: arr(o.categories),
     goals: arr<Plan["goals"][number]>(o.goals).map((g) => ({ ...g, target: num(g.target), saved: num(g.saved), date: g.date || "", accountId: g.accountId || "" })),
     extraTo: typeof o.extraTo === "string" ? o.extraTo : "",
-    paydays: arr(o.paydays),
+    paydays: arr<Payday>(o.paydays)
+      .filter((p) => p && typeof p.date === "number")
+      .map((p) => ({
+        ...p,
+        pay: num(p.pay),
+        spend: num(p.spend),
+        saved: num(p.saved),
+        moves: arr(p.moves),
+        limits: Array.isArray(p.limits) ? p.limits.map((l) => ({ ...l, limit: num(l.limit) })) : undefined,
+        goals: Array.isArray(p.goals) ? p.goals.map((g) => ({ ...g, amount: num(g.amount) })) : undefined,
+      })),
   };
 }
 

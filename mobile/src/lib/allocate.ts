@@ -138,6 +138,12 @@ export function logPayday(payIn: number, plan: Plan, acc: AccountsDoc, apply: bo
       return t ? { ...a, balance: cents(num(a.balance) + t.amount), updated: now } : a;
     });
   }
-  const paydays = [...plan.paydays, { date: now, pay: r.pay, spend: r.spendTotal, saved: r.saveTotal, moves: r.transfers, applied: apply }].slice(-60);
+  // Keep this period's limits and each goal's share so the History tab can look back later.
+  const limits = plan.categories.map((c) => ({ id: c.id, name: c.name || "Unnamed", limit: cents(c.limit) }));
+  const shares = new Map<string, number>();
+  for (const x of r.goals) shares.set(x.goal.id, cents((shares.get(x.goal.id) ?? 0) + x.amount));
+  if (r.extra?.goal) shares.set(r.extra.goal.id, cents((shares.get(r.extra.goal.id) ?? 0) + r.extra.amount));
+  const goalShares = [...shares].map(([id, amount]) => ({ id, amount }));
+  const paydays = [...plan.paydays, { date: now, pay: r.pay, spend: r.spendTotal, saved: r.saveTotal, moves: r.transfers, applied: apply, limits, goals: goalShares }].slice(-60);
   return { plan: { ...plan, goals, paydays }, acc: { ...acc, accounts }, result: r };
 }

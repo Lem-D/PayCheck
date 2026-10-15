@@ -117,7 +117,22 @@ describe("logPayday", () => {
     const next = logPayday(2000, p, acc, true, NOW);
     expect(next.plan.goals[0].saved).toBe(700);
     expect(next.acc.accounts.find((a) => a.id === "tfsa")?.balance).toBe(1700);
-    expect(next.plan.paydays).toEqual([{ date: NOW, pay: 2000, spend: 1300, saved: 700, applied: true, moves: [{ accountId: "tfsa", name: "EQ TFSA", amount: 700 }] }]);
+    expect(next.plan.paydays).toEqual([
+      {
+        date: NOW,
+        pay: 2000,
+        spend: 1300,
+        saved: 700,
+        applied: true,
+        moves: [{ accountId: "tfsa", name: "EQ TFSA", amount: 700 }],
+        limits: [
+          { id: "a", name: "Rent", limit: 1000 },
+          { id: "b", name: "Groceries", limit: 300 },
+        ],
+        // The dated share and the leftover both went to the same goal.
+        goals: [{ id: "g", amount: 700 }],
+      },
+    ]);
   });
 
   it("only logs when not applied, and keeps the latest 60", () => {

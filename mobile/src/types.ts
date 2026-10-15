@@ -54,6 +54,10 @@ export interface Payday {
   saved: number;
   moves: Move[];
   applied: boolean;
+  /** The spending limits for the pay period this payday starts. Missing on paydays logged before step 4. */
+  limits?: { id: string; name: string; limit: number }[];
+  /** What each goal got this payday. Missing on paydays logged before step 4. */
+  goals?: { id: string; amount: number }[];
 }
 
 export interface Plan {
