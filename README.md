@@ -13,7 +13,7 @@ A personal budgeting app built around one idea: every paycheque gets split up fr
 1. **Accounts and debts** (done). Enter each account (chequing, savings, TFSA, RRSP, FHSA) with its balance, plus anything you owe (credit cards, loans). Shows your net worth at a glance.
 2. **Payday from goals** (done). Type in what you got paid and it tells you where it goes: spending limits first, then what each savings goal needs to hit its date, then leftovers to the goal or account you pick. It lists the transfers to make.
 3. **Track spending against your limits** (done in the phone app). Log purchases by hand as they happen; each category shows how much is left until next payday, turning yellow and red as you get close.
-4. **Habit tracking.** A history per pay period showing whether you stayed under each limit and how much you saved, and how each goal is tracking.
+4. **Habit tracking** (done in the phone app). A history per pay period showing whether you stayed under each limit and how much you saved, and how each goal is tracking.
 
 See [DESIGN.md](DESIGN.md) for the data model, storage and screens.
 

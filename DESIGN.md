@@ -125,23 +125,34 @@ Stored on the phone under `paycheque-plan-spending`. Logic lives in `mobile/src/
 - **Totals.** Left to spend across all limits, and days until the expected next payday. Purchases in categories that have since been removed still count toward the total and are called out.
 - Deleting a purchase takes a second tap to confirm.
 
-### Step 4: habit history (planned)
+### Step 4: habit history (built)
 
-A closed period (the time between two logged paydays) records, per category, whether the limit was kept, plus how much was saved that payday. That feeds a history of pay periods and how each goal is tracking against its date. No new storage should be needed: purchases and `paydays` already hold everything.
+Logic lives in `mobile/src/lib/history.ts`, covered by `history.test.ts`. Nothing new is stored except two fields on each payday:
+
+```js
+paydays: [{ ..., limits: [{ id, name, limit }], goals: [{ id, amount }] }]
+```
+
+`limits` are the spending limits when the payday was logged, so a period is judged against the limits it had even if you change them later. `goals` is what each goal got that payday (its dated share plus any leftover). Paydays logged before step 4 don't have them: those periods use today's limits and say so, and goal pace starts with the next payday.
+
+- **Pay periods.** Each logged payday starts one, and it ends when the next payday is logged. The latest is still running and shows "so far". Purchases before the first logged payday aren't counted.
+- **Limit kept** means spending in that category was no more than its limit (spending exactly the limit counts as kept, though the Spending tab already shows it red). Spending in categories that weren't limits that period is shown separately.
+- **Summary** covers finished periods only: share of limits kept, total and average saved per payday, savings rate, and the streak of periods in a row (counting back from the latest) where every limit was kept. Each category shows how many periods it was kept and a dot per period for the last 8.
+- **Goal pace.** What each goal got on average over the last three paydays that recorded it, against what it needs per paycheque now (`perPaycheque`). On track if it's getting at least that much, behind if not. At the current pace, the finish date is `now + ceil(remaining / average) × period length`. Goals without a date show their pace only.
 
 ## Screens
 
-The phone app has four tabs in a bottom bar: **Payday** (the default), **Spending**, **Goals** and **Accounts**. The prototype has the same tabs minus Spending; there, the last tab used is remembered per browser and `#payday`, `#goals` or `#accounts` in the URL picks one.
+The phone app has five tabs in a bottom bar: **Payday** (the default), **Spending**, **Goals**, **Accounts** and **History**. The prototype has the same tabs minus Spending; there, the last tab used is remembered per browser and `#payday`, `#goals` or `#accounts` in the URL picks one.
 
 1. **Payday** (built). One big "I got paid" amount. As you type, it shows keep for spending versus move to savings, notes (shortfall, unassigned money, savings rate), transfers to make per account, what each goal gets with amount to go, date and paydays left, and each category's spending money. "I moved the money" logs it. The last 6 paydays are listed. With no limits or goals yet, it shows a "Set up my goals" prompt.
 2. **Goals** (built). Savings goals with progress and the per-paycheque amount; pay frequency and spending limits ("Start with common categories" seeds Rent, Groceries, Phone, Transit or gas, Eating out, Fun money); and where anything left over goes.
 3. **Accounts** (built). Net worth headline with a have/owe bar, then account and debt lists. Tapping a row opens an inline editor; delete needs a second tap to confirm.
 4. **Spending** (built, phone app). Left to spend this period with days until payday, a quick "Log a purchase" form (amount, which limit, optional note), each limit with what's left and its colour, and this period's purchases with delete.
-5. **History** (planned). One row per pay period with limits kept and amount saved.
+5. **History** (built, phone app). A ring for the share of limits kept with the streak, saved in total and per payday, each goal's pace (on track or behind, needed versus getting per pay), each limit's record with a dot per pay period, and one tile per pay period with what was saved and which limits went over.
 
 ## Plan
 
 1. Accounts and debts with net worth. Done.
 2. Payday from goals. Done.
 3. Track spending against limits. Done in the phone app.
-4. Habit history (savings goals were pulled into step 2).
+4. Habit history. Done in the phone app.
