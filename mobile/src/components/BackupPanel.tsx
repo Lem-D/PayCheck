@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { backupName, makeBackup, readBackup, type BackupData, type BackupSummary } from "../lib/backup";
+import { backupName, describe, makeBackup, readBackup, type BackupData, type BackupSummary } from "../lib/backup";
 import { pickBackupFile, saveBackupFile } from "../lib/backupFile";
 import { useStore } from "../lib/store";
 import { useColors } from "../theme";
@@ -10,11 +10,6 @@ import { Button, Muted, Note, Section, T, Tile } from "./ui";
 const LAST_KEY = "paycheque-plan-last-backup";
 const DAY = 86_400_000;
 const when = (t: number) => new Date(t).toLocaleDateString("en-CA", { month: "short", day: "numeric", year: "numeric" });
-const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
-
-function describe(s: BackupSummary): string {
-  return [plural(s.accounts, "account"), plural(s.debts, "debt"), plural(s.goals, "goal"), plural(s.limits, "spending limit"), plural(s.paydays, "payday"), plural(s.purchases, "purchase")].join(", ");
-}
 
 /** Save everything to a file you keep somewhere safe, and restore it on this or another phone. */
 export default function BackupPanel() {
@@ -78,7 +73,7 @@ export default function BackupPanel() {
   return (
     <Section title="Your data">
       <Tile style={{ gap: 10 }}>
-        <T size={14}>Everything is saved on this phone. Save a backup file to Files, iCloud Drive or email, so you can restore it on a new phone or after reinstalling.</T>
+        <T size={14}>Everything is saved on this device. Save a backup file to Files, iCloud Drive or email, so you can restore it on a new phone or after reinstalling.</T>
         <Muted size={13} style={hasData && stale ? { color: c.warn } : undefined}>
           {last ? `Last backup ${when(last)}` : "No backup yet"}
         </Muted>

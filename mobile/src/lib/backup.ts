@@ -41,6 +41,13 @@ export const summarizeBackup = ({ acc, plan, spending }: BackupData, exportedAt:
   purchases: spending.purchases.length,
 });
 
+const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
+
+/** "2 accounts, 0 debts, 3 goals, ..." */
+export function describe(s: BackupSummary): string {
+  return [plural(s.accounts, "account"), plural(s.debts, "debt"), plural(s.goals, "goal"), plural(s.limits, "spending limit"), plural(s.paydays, "payday"), plural(s.purchases, "purchase")].join(", ");
+}
+
 export type ReadResult = ({ ok: true; summary: BackupSummary } & BackupData) | { ok: false; error: string };
 
 /** Checks a backup file and cleans it up the same way saved data is when the app starts. */
