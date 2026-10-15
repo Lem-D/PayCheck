@@ -46,6 +46,12 @@
       ],
       "expo-sharing"
     ],
-    "scheme": "paycheck"
+    "scheme": "paycheck",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "27e41920-37a5-4312-bcf1-7efa6e1b1273"
+      }
+    }
   }
 }
