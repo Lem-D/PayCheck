@@ -57,6 +57,7 @@ export default function RootLayout() {
             <Tabs.Screen name="spending" options={{ title: "Spending", tabBarIcon: icon("cart-outline") }} />
             <Tabs.Screen name="goals" options={{ title: "Goals", tabBarIcon: icon("flag-outline") }} />
             <Tabs.Screen name="accounts" options={{ title: "Accounts", tabBarIcon: icon("wallet-outline") }} />
+            <Tabs.Screen name="history" options={{ title: "History", tabBarIcon: icon("stats-chart-outline") }} />
           </Tabs>
         </StoreProvider>
       </View>
