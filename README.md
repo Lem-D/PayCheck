@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="logo/paycheck-wordmark-on-dark-256.png">
-    <img src="logo/paycheck-wordmark-on-dark-256.png" width="180" alt="PayCheck logo: a blue bill with a P and a stack of gold coins">
+    <source media="(prefers-color-scheme: dark)" srcset="logo/paycheck-wordmark-on-dark-512.png">
+    <img src="logo/paycheck-wordmark-on-dark-512.png" width="100%" alt="PayCheck logo: a blue bill with a P and a stack of gold coins">
   </picture>
 </p>
 
