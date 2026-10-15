@@ -53,25 +53,25 @@ Code layout:
 
 ## On your iPhone home screen (free)
 
-The web version installs like an app from Safari, on iPhone, iPad and Mac, with no App Store and nothing to renew. It's hosted on Render as a free static site, set up by [`render.yaml`](../render.yaml) at the top of the repo. Every push to `main` runs the tests, builds it (`npm run build:web`) and publishes it.
+The web version installs like an app from Safari, on iPhone, iPad and Mac, with no App Store and nothing to renew. It's hosted by Expo (EAS Hosting) at an `expo.app` address.
 
-One-time setup:
+To publish it, from this folder:
 
-1. Make a free account at render.com and sign in with GitHub.
-2. Click **New**, then **Blueprint**, pick the `PayCheck` repo (let Render see it if it asks), and click **Apply**.
-3. When the first build finishes, the `paycheck` site's page shows its address, something like **https://paycheck.onrender.com**. If that name is taken, Render adds a few letters to the end.
+1. Make a free account at expo.dev if you don't have one (the same account works for Expo Go), then run `npx eas-cli@latest login`.
+2. Run:
+   ```bash
+   npm run deploy:web
+   ```
+   This builds the web version (`npm run build:web`, into `dist/`) and uploads it. The first time, it offers to create the Expo project (say yes) and asks you to pick a name for the address. Pick something like `paycheck`, and the app lives at **https://paycheck.expo.app**. It adds the project's id to `app.json`, so commit that change.
+3. To publish a change later, run `npm run deploy:web` again. The home screen app picks it up the next time you open it.
 
 To install it on your iPhone:
 
-1. Open that address in Safari.
+1. Open your `expo.app` address in Safari. The terminal prints it after the deploy, and it's also on expo.dev under the project's Hosting page.
 2. Tap the Share button, then **Add to Home Screen**, then **Add**.
 3. Open PayCheck from the home screen. It runs full screen with the P Bill icon.
 
 Your numbers are kept inside the home screen app on that device, separate from Safari and from Expo Go. To move them, use **Save a backup** and **Restore from a backup** on the Accounts tab; on the iPhone, Save a backup opens the share sheet so you can pick **Save to Files**. Back up now and then: if you delete the home screen icon, its data goes with it.
-
-Render only hosts the web version. Expo Go doesn't use it: Expo Go loads the app from `npm start` on your computer (see "Run it on your phone" above), whichever way the web version is hosted.
-
-`npm run build:web` builds the web version locally into `dist/`.
 
 ## Installing it for real
 

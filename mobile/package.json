@@ -44,7 +44,8 @@
     "test": "jest",
     "build:android": "npx eas-cli@latest build --profile preview --platform android",
     "build:ios": "npx eas-cli@latest build --profile preview --platform ios",
-    "build:web": "expo export --platform web && node scripts/web-pwa.mjs dist"
+    "build:web": "expo export --platform web && node scripts/web-pwa.mjs dist",
+    "deploy:web": "npm run build:web && npx eas-cli@latest deploy --prod"
   },
   "private": true,
   "jest": {
