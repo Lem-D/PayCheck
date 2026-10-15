@@ -5,7 +5,6 @@
   </picture>
 </p>
 
-# PayCheck
 
 A personal budgeting app built around one idea: every paycheque gets split up front. You give yourself a set amount to spend per category, and the rest goes straight into savings (TFSA, a regular savings account, or both).
 
