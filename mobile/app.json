@@ -21,7 +21,11 @@
       "package": "com.lemd.paycheck"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "name": "PayCheck",
+      "shortName": "PayCheck",
+      "themeColor": "#f2f5fa",
+      "backgroundColor": "#f2f5fa"
     },
     "plugins": [
       "expo-router",
@@ -38,8 +42,12 @@
             "backgroundColor": "#0e1626"
           }
         }
-      ]
+      ],
+      "expo-sharing"
     ],
-    "scheme": "paycheck"
+    "scheme": "paycheck",
+    "experiments": {
+      "baseUrl": "/PayCheck"
+    }
   }
 }

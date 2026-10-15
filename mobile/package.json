@@ -8,9 +8,12 @@
     "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~57.0.28",
     "expo-constants": "~57.0.21",
+    "expo-document-picker": "~57.0.3",
+    "expo-file-system": "~57.0.7",
     "expo-font": "~57.0.4",
     "expo-linking": "~57.0.12",
     "expo-router": "~57.0.26",
+    "expo-sharing": "~57.0.23",
     "expo-splash-screen": "~57.0.10",
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.4",
@@ -36,7 +39,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "test": "jest"
+    "test": "jest",
+    "build:android": "npx eas-cli@latest build --profile preview --platform android",
+    "build:ios": "npx eas-cli@latest build --profile preview --platform ios",
+    "build:web": "expo export --platform web && node scripts/web-pwa.mjs dist"
   },
   "private": true,
   "jest": {
